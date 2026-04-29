@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Custos Nox — F2 Pitch Deck</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --fg: #ededed;
+    --muted: #71717a;
+    --green: #4ade80;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    cursor: default;
+  }
+  .stage {
+    position: fixed; inset: 0;
+    display: grid; place-items: center;
+  }
+  .slide {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 120ms ease-out;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide img {
+    max-width: 100vw;
+    max-height: 100vh;
+    width: auto; height: auto;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  .hud {
+    position: fixed;
+    bottom: 14px; left: 50%; transform: translateX(-50%);
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid #27272a;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    backdrop-filter: blur(6px);
+    user-select: none;
+    z-index: 100;
+    transition: opacity 300ms ease-out;
+  }
+  .hud.idle { opacity: 0.15; }
+  .hud kbd {
+    background: #18181b;
+    border: 1px solid #3f3f46;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: ui-monospace, "Cascadia Mono", monospace;
+    font-size: 11px;
+    color: var(--fg);
+    margin: 0 2px;
+  }
+  .counter {
+    color: var(--green);
+    font-weight: 600;
+    margin-right: 10px;
+  }
+  .help {
+    position: fixed;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(10, 10, 10, 0.92);
+    border: 1px solid #3f3f46;
+    border-radius: 12px;
+    padding: 28px 36px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--fg);
+    z-index: 200;
+    display: none;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  }
+  .help.show { display: block; }
+  .help h3 { font-size: 18px; margin-bottom: 12px; color: var(--green); }
+  .help kbd {
+    background: #27272a; border: 1px solid #52525b;
+    border-radius: 4px; padding: 1px 8px;
+    font-family: ui-monospace, monospace; font-size: 12px;
+    color: var(--fg);
+  }
+  .help table { border-collapse: collapse; }
+  .help td { padding: 4px 14px 4px 0; }
+  .help td:first-child { white-space: nowrap; }
+  /* Hide cursor in idle fullscreen */
+  body.idle { cursor: none; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="slide" data-i="1"><img src="pitch-slide-01.png" alt="Slide 1" /></div>
+  <div class="slide" data-i="2"><img src="pitch-slide-02.png" alt="Slide 2" /></div>
+  <div class="slide" data-i="3"><img src="pitch-slide-03.png" alt="Slide 3" /></div>
+  <div class="slide" data-i="4"><img src="pitch-slide-04.png" alt="Slide 4" /></div>
+  <div class="slide" data-i="5"><img src="pitch-slide-05.png" alt="Slide 5" /></div>
+  <div class="slide" data-i="6"><img src="pitch-slide-06.png" alt="Slide 6" /></div>
+  <div class="slide" data-i="7"><img src="pitch-slide-07.png" alt="Slide 7" /></div>
+</div>
+
+<div class="hud" id="hud">
+  <span class="counter" id="counter">01 / 07</span>
+  <kbd>←</kbd> <kbd>→</kbd> navigate &nbsp;·&nbsp; <kbd>F</kbd> fullscreen &nbsp;·&nbsp; <kbd>?</kbd> help
+</div>
+
+<div class="help" id="help">
+  <h3>F2 Pitch Deck — controls</h3>
+  <table>
+    <tr><td><kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd> <kbd>↓</kbd></td><td>next slide</td></tr>
+    <tr><td><kbd>←</kbd> <kbd>PgUp</kbd> <kbd>↑</kbd></td><td>previous slide</td></tr>
+    <tr><td><kbd>Home</kbd> <kbd>1..7</kbd></td><td>jump to slide</td></tr>
+    <tr><td><kbd>End</kbd></td><td>last slide</td></tr>
+    <tr><td><kbd>F</kbd></td><td>toggle fullscreen</td></tr>
+    <tr><td><kbd>H</kbd></td><td>toggle HUD</td></tr>
+    <tr><td><kbd>?</kbd> <kbd>Esc</kbd></td><td>this help / close</td></tr>
+  </table>
+  <div style="margin-top: 14px; color: var(--muted); font-size: 12px;">
+    Tip: hit <kbd>F</kbd> to fullscreen before recording Loom — cleaner capture.
+  </div>
+</div>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  const hud = document.getElementById('hud');
+  const help = document.getElementById('help');
+  const total = slides.length;
+  let idx = 0;
+  let idleTimer = null;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function render() {
+    slides.forEach((el, i) => el.classList.toggle('active', i === idx));
+    counter.textContent = `${pad(idx + 1)} / ${pad(total)}`;
+    history.replaceState(null, '', '#' + (idx + 1));
+  }
+
+  function go(n) {
+    idx = Math.max(0, Math.min(total - 1, n));
+    render();
+  }
+
+  function next() { go(idx + 1); }
+  function prev() { go(idx - 1); }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
+    }
+  }
+
+  function toggleHelp(force) {
+    const show = typeof force === 'boolean' ? force : !help.classList.contains('show');
+    help.classList.toggle('show', show);
+  }
+
+  function toggleHud() {
+    hud.style.display = hud.style.display === 'none' ? '' : 'none';
+  }
+
+  function resetIdle() {
+    document.body.classList.remove('idle');
+    hud.classList.remove('idle');
+    if (idleTimer) clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => {
+      document.body.classList.add('idle');
+      hud.classList.add('idle');
+    }, 2500);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    resetIdle();
+    if (help.classList.contains('show') && (e.key === 'Escape' || e.key === '?')) {
+      toggleHelp(false);
+      e.preventDefault();
+      return;
+    }
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case 'ArrowDown': case ' ':
+        next(); e.preventDefault(); break;
+      case 'ArrowLeft': case 'PageUp': case 'ArrowUp':
+        prev(); e.preventDefault(); break;
+      case 'Home': go(0); e.preventDefault(); break;
+      case 'End': go(total - 1); e.preventDefault(); break;
+      case 'f': case 'F': toggleFullscreen(); e.preventDefault(); break;
+      case 'h': case 'H': toggleHud(); e.preventDefault(); break;
+      case '?': toggleHelp(); e.preventDefault(); break;
+      case 'Escape': toggleHelp(false); e.preventDefault(); break;
+      default:
+        if (e.key >= '1' && e.key <= '9') {
+          const n = parseInt(e.key, 10) - 1;
+          if (n < total) { go(n); e.preventDefault(); }
+        }
+    }
+  });
+
+  // Click to advance, right-click handled natively
+  document.addEventListener('click', (e) => {
+    if (help.classList.contains('show')) return;
+    resetIdle();
+    if (e.clientX < window.innerWidth / 3) prev(); else next();
+  });
+
+  document.addEventListener('mousemove', resetIdle);
+
+  // Restore from hash
+  const hashIdx = parseInt((location.hash || '').replace('#', ''), 10);
+  if (!isNaN(hashIdx) && hashIdx >= 1 && hashIdx <= total) idx = hashIdx - 1;
+
+  render();
+  resetIdle();
+
+  // Preload all images
+  slides.forEach(s => { const img = s.querySelector('img'); if (img) img.loading = 'eager'; });
+})();
+</script>
+</body>
+</html>
