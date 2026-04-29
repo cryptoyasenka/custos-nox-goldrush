@@ -184,7 +184,7 @@ Watching your first multisig in 5 minutes. MIT.
 
 **Коли:** 2026-05-01 (пт) чорновий, 2026-05-04 (пн) фінал
 **Інструмент:** OBS Studio / Loom Desktop / Win+G Game Bar (локальний запис) → upload на YouTube **Unlisted** (той самий канал що F1 Week 3 video 2026-04-24)
-**Скрипт:** повний у `planning/PITCH-SCRIPT-F2.md` (single source of truth — там 272 слова, синхронізовано зі слайдами `assets/pitch-slides/`); нижче — застаріла слайд-by-слайд копія, якщо drift'нула — довіряй `PITCH-SCRIPT-F2.md`
+**Скрипт:** повний у `planning/PITCH-SCRIPT-F2.md` (single source of truth — там 272 слова, синхронізовано зі слайдами `assets/pitch-slides/`)
 
 ## Pre-recording setup (≤30 хв)
 
@@ -203,21 +203,7 @@ Watching your first multisig in 5 minutes. MIT.
 
 1. Запиши локально: OBS Studio (recommended) / Loom Desktop / Win+G Game Bar — Screen + Cam side-by-side, 1080p
 2. Тиха кімната, light на обличчя, mic без шуму
-3. **Скрипт по слайдах** (повний у `PITCH-SCRIPT-F2.md`):
-
-> **Slide 1:** "On April 1, 2026, $285 million was drained from Drift Protocol — more than half of its total value locked. The attack didn't happen in one transaction. It took weeks. A migrated Security Council multisig with a 2-of-5 threshold and zero timelock. Durable nonces seeded by privileged signers. A pre-signed admin transfer waiting in the queue. Every one of those moves happened on chain. In public. Nobody noticed."
-
-> **Slide 2:** "Solana Foundation's STRIDE program monitors big protocols — the ones with $10 million or more in TVL. That's maybe a hundred projects. There are thousands of DAOs, grant committees, and treasury multisigs below that line. They have nothing."
-
-> **Slide 3:** "Custos Nox is an open-source daemon that watches Solana accounts over WebSocket and fires an alert the moment a config change matches a known attack pattern. Five detectors, live today. Four map to every step of the Drift attack chain — timelock removed, multisig weakened, nonce seeded, stale nonce executed. The fifth catches signer rotation, an adjacent vector that's hit other Solana teams. Any single alert would have stopped the drain. Discord and Slack alerts, self-hosted in five minutes, MIT licensed, zero paid tiers."
-
-> **Slide 4:** "The repo is public. 205 tests, GitHub Actions CI green. A devnet smoke harness reproduces three Drift attack-chain steps plus the signer-rotation vector — four live alerts in real time. Live dashboard at custos-nox.up.railway.app."
-
-> **Slide 5:** "Our first users are Squads multisig operators — protocol treasuries, grant committees, hackathon prize pools. They're already on Discord. The integration is one webhook URL. We're reaching out to Squads multisig operators directly — the integration is one webhook URL and a five-minute self-host. Issue tracker is open for detector requests."
-
-> **Slide 6 (skip if running long):** "Long term: a hosted alert feed that any DAO can subscribe to with zero infra. A pre-configured watchlist of the top 50 Solana multisigs by TVL. The security layer that lives between on-chain governance and the first Discord ping."
-
-> **Slide 7 (close):** "I'm Yasya from Superteam Ukraine. The code is live on GitHub, the demo runs on devnet, and the five detectors are watching right now. github.com/cryptoyasenka/custos-nox"
+3. **Текст по слайдах:** дивись `planning/PITCH-SCRIPT-F2.md` — там 7 слайдів, 272 слова, синхронізовано зі слайдами `assets/pitch-slides/`. НЕ дублюй сюди — drift гарантовано.
 
 ## Post-recording (2026-05-04)
 
