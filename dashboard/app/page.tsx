@@ -204,8 +204,8 @@ export default function Home() {
             <div className="mb-8 flex flex-col gap-3">
               <h2 className="text-3xl font-semibold tracking-tight">Self-host in 5 minutes</h2>
               <p className="max-w-2xl text-muted-strong">
-                One binary, zero vendor lock-in. Runs on any Node.js 20+ or Docker.
-                Free-tier Helius RPC is enough to get started.
+                One binary, zero vendor lock-in. Runs on any Node.js 20+ or Docker. Free-tier Helius
+                RPC is enough to get started.
               </p>
             </div>
 
@@ -236,7 +236,9 @@ export default function Home() {
                 <div className="mb-3 flex h-7 w-7 items-center justify-center rounded-full bg-accent font-mono text-sm font-semibold text-background">
                   2
                 </div>
-                <div className="mb-1.5 font-semibold text-foreground">Point it at your multisig</div>
+                <div className="mb-1.5 font-semibold text-foreground">
+                  Point it at your multisig
+                </div>
                 <p className="text-sm text-muted-strong">
                   Set{" "}
                   <code className="rounded bg-surface-elevated px-1 font-mono text-xs">
@@ -256,8 +258,8 @@ export default function Home() {
                   <code className="rounded bg-surface-elevated px-1 font-mono text-xs">
                     npm run dev
                   </code>{" "}
-                  or the Docker one-liner below. Alerts arrive in Discord, Slack, or stdout within
-                  a second of any config change.
+                  or the Docker one-liner below. Alerts arrive in Discord, Slack, or stdout within a
+                  second of any config change.
                 </p>
               </div>
             </div>
