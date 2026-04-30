@@ -66,20 +66,24 @@
 
 | Статья | Обоснование |
 |---|---|
-| Разработка (developer time) | Основная статья. Детекторы, тесты, infrastructure — это месяцы работы |
-| Helius RPC (mainnet hosting) | Free tier ограничен. Для production мониторинга нужен платный план ~$50-100/мес |
-| Render/Fly.io daemon hosting | Продакшн daemon 24/7 на платном тире ~$20/мес |
-| Security audit | Сторонний аудит кода — доверие пользователей |
-| Documentation | Написать нормальный onboarding чтобы другие DAO могли задеплоить |
-| Outreach | Связаться с реальными DAO командами (Realms, Squads users) чтобы они попробовали |
+| Разработка (developer time) | Основная статья. Детекторы, тесты, web dashboard — это месяцы работы |
+| Security audit | Сторонний аудит кода — доверие пользователей перед деплоем в production |
+| Documentation | Написать нормальный onboarding чтобы non-technical DAO команди могли задеплоїти |
+| Outreach | Звʼязатися з реальними DAO командами (Realms, Squads users) щоб вони спробували |
+
+> Примечание: RPC и hosting — ответственность пользователя (self-hosted модель).
+> Каждый деплоит на своём Helius аккаунте (free tier хватает для одного multisig).
+> Yana не платит за инфраструктуру пользователей.
 
 ### Шаблон ответа на "зачем деньги"
 
-> Custos Nox — public good для всего Solana ecosystem. Код MIT, инструмент бесплатный навсегда. Но разработка требует времени разработчика, а production-grade мониторинг требует надёжного RPC и хостинга. Грант покрывает:
-> (1) developer time на следующие N детекторов и web dashboard,
-> (2) infrastructure costs для managed demo instance который любая DAO может попробовать без setup,
+> Custos Nox — public good для всего Solana ecosystem. Код MIT, self-hosted:
+> каждый деплоит на своей инфраструктуре с собственным Helius ключом — без vendor lock-in
+> и без инфраструктурных расходов для автора. Грант покрывает исключительно время разработчика:
+> (1) следующие детекторы и web dashboard чтобы non-technical DAO могли использовать без CLI,
+> (2) security audit для доверия перед production деплоями,
 > (3) outreach чтобы реальные multisig команды узнали что инструмент существует.
-> Цель: к концу гранта — 10+ реальных DAO которые используют Custos Nox для защиты своих treasury.
+> Цель: к концу гранта — 10+ реальных DAO которые используют Custos Nox для защиты treasury.
 
 ---
 
