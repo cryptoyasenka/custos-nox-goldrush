@@ -379,9 +379,9 @@ Architecture highlights:
 
 • TypeScript daemon, zero Rust, pure npm — contributors don't need a Solana dev environment to build or test.
 • WebSocket with exponential backoff (1s → 60s) and 30-second slot health checks.
-• Alert fan-out to Discord webhooks, Slack webhooks, and stdout — all sinks receive every alert; one failing sink doesn't block the others.
+• Alert fan-out to Discord, Slack, Telegram, and stdout — all sinks receive every alert in parallel; one failing sink doesn't block the others.
 • Per-detector 5s timeout: a hanging detector surfaces a low-severity operational alert instead of silently blocking the pipeline.
-• 205 unit + integration tests; GitHub Actions CI on every push.
+• 215 unit + integration tests; GitHub Actions CI on every push.
 
 A devnet smoke harness (scripts/) reproduces three core Drift attack-chain steps end-to-end on chain (timelock removal, multisig weakening, privileged-nonce init), plus the adjacent signer-set rotation that the fifth detector catches. Each script fires a real on-chain transaction; the daemon prints the corresponding alert within seconds. The fourth Drift step — stale-nonce execution — is covered by 12 unit tests that match the exact Drift pattern.
 
@@ -481,7 +481,7 @@ Watches Squads multisigs and durable-nonce accounts over WebSocket and fires sub
 Live dashboard: https://custos-nox.up.railway.app
 GitHub: https://github.com/cryptoyasenka/custos-nox
 
-205 tests, MIT licensed, self-host in 5 minutes. Feedback welcome.
+215 tests, MIT licensed, self-host in 5 minutes. Feedback welcome.
 ```
 
 ### DO / DON'T:
@@ -584,7 +584,7 @@ Submitting Custos Nox to @colosseum Frontier Hackathon this week.
 
 Where we landed:
 • 5 detectors covering the full Drift chain + 1 adjacent
-• 205 tests, GitHub Actions green
+• 215 tests, GitHub Actions green
 • Live dashboard, MIT licensed
 • ~3,200 lines of TypeScript, zero Rust, zero paid tiers
 

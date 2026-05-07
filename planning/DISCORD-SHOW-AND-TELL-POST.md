@@ -16,7 +16,7 @@ Watches Squads multisigs and durable-nonce accounts over WebSocket and fires sub
 Live dashboard: https://custos-nox.up.railway.app
 GitHub: https://github.com/cryptoyasenka/custos-nox
 
-205 tests, MIT licensed, self-host in 5 minutes. Feedback welcome.
+215 tests, MIT licensed, self-host in 5 minutes. Feedback welcome.
 ```
 
 ---
@@ -28,7 +28,7 @@ On April 1, $285M drained from Drift in 12 minutes. The attack itself was fast â
 
 Built Custos Nox for Frontier 2026: an open-source daemon that watches Solana multisigs and durable-nonce accounts and fires alerts the moment a config change matches a known attack pattern.
 
-Five detectors live: four mapped to each step of the Drift attack chain, one for an adjacent signer-rotation vector that's hit other Solana protocols. Sub-second Discord/Slack alerts. Self-host in five minutes.
+Five detectors live: four mapped to each step of the Drift attack chain, one for an adjacent signer-rotation vector that's hit other Solana protocols. Sub-second Discord/Slack/Telegram alerts. Self-host in five minutes.
 
 Live: https://custos-nox.up.railway.app
 GitHub: https://github.com/cryptoyasenka/custos-nox

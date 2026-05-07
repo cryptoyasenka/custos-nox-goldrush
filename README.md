@@ -6,7 +6,7 @@
 
 [![ci](https://github.com/cryptoyasenka/custos-nox/actions/workflows/ci.yml/badge.svg)](https://github.com/cryptoyasenka/custos-nox/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-205%20passing-brightgreen)](https://github.com/cryptoyasenka/custos-nox/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-215%20passing-brightgreen)](https://github.com/cryptoyasenka/custos-nox/actions/workflows/ci.yml)
 
 Open-source real-time monitor for Solana multisigs and DAOs. Detects the
 attack chain that drained $285M from Drift on April 1, 2026.
@@ -20,7 +20,7 @@ attack chain that drained $285M from Drift on April 1, 2026.
 
 Pre-release, built for the Solana Frontier Hackathon
 (submission 2026-05-10 23:59 PDT). All five detectors are live and
-passing 205 tests. The devnet smoke harness in `scripts/` reproduces
+passing 215 tests. The devnet smoke harness in `scripts/` reproduces
 the full Drift attack chain end-to-end on-chain.
 
 ## What it catches
@@ -44,9 +44,9 @@ exploits but was not exercised in Drift specifically.
   nonce was first initialized. Fires when the gap exceeds a configurable
   threshold (default 1 hour).
 
-Alerts fan out to Discord, Slack, and CLI. Every configured sink
-receives every alert; webhook failures are logged but do not block
-other sinks. Detectors that throw or hang are surfaced as low-severity
+Alerts fan out to Discord, Slack, Telegram, and CLI. Every configured
+sink receives every alert in parallel; webhook failures are logged but
+do not block other sinks. Detectors that throw or hang are surfaced as low-severity
 operational alerts rather than disappearing into stderr.
 
 ## How this catches the Drift attack chain
@@ -119,7 +119,7 @@ initial implementation, all on `main`:
    prunes `firstSeenAt` entries older than 2× threshold every 100
    inspect calls, with a 10 000-entry hard cap as a safety net.
 
-Test coverage grew from 147 to 205 across these changes.
+Test coverage grew from 147 to 215 across these changes (205 after the hardening pass; 10 added for the Telegram sink).
 
 ## Quick start
 
@@ -156,14 +156,15 @@ npm run dev
 
 # Terminal 1 — simulate the Drift attack chain, one step at a time.
 # Each command triggers an alert in Terminal 2.
-npm run smoke:timelock  -- <MULTISIG_PDA>   # CRITICAL: timelock removed
-npm run smoke:weaken    -- <MULTISIG_PDA>   # HIGH:     3-of-5 → 1-of-5
-npm run smoke:nonce-init                    # CRITICAL: nonce initialized
+npm run smoke:timelock        -- <MULTISIG_PDA>   # CRITICAL: timelock removed
+npm run smoke:weaken          -- <MULTISIG_PDA>   # HIGH:     3-of-5 → 1-of-5
+npm run smoke:nonce-init                          # CRITICAL: nonce initialized
+npm run smoke:rotate-signers  -- <MULTISIG_PDA>   # HIGH:     signer evicted + attacker added
 ```
 
 Within a few seconds of each config transaction confirming, the daemon
-in Terminal 2 prints one alert per step — three of the four live
-detectors firing on this quickstart chain. The fourth
+in Terminal 2 prints one alert per step — four detectors firing on this
+quickstart chain (three Drift-chain steps plus the adjacent signer-rotation vector). The fourth
 (`StaleNonceExecutionDetector`) arms automatically once the nonce is
 initialized and would fire later, when a stale pre-signed transaction
 advances it — i.e. the actual drain step on mainnet.

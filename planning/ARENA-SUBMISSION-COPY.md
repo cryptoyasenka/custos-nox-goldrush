@@ -84,7 +84,6 @@ GitHub: https://github.com/cryptoyasenka/custos-nox
 ---
 
 Roadmap:
-• Telegram bot alerts — the third major channel alongside Discord and Slack (implemented in v0.4, shipping May 2026).
 • API mode and hosted alert feed — for teams that can't self-host.
 • Mainnet watchlist — pre-configured coverage of the top 50 Squads multisigs by TVL.
 

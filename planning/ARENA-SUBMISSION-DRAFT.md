@@ -78,11 +78,11 @@ single alert would have bought hours of response time.
 - TypeScript daemon, zero Rust, pure npm — contributors don't need a Solana
   dev environment to build or test.
 - WebSocket with exponential backoff (1s → 60s) and 30-second slot health checks.
-- Alert fan-out to Discord webhooks, Slack webhooks, and stdout — all sinks
-  receive every alert; one failing sink doesn't block the others.
+- Alert fan-out to Discord, Slack, Telegram, and stdout — all sinks receive
+  every alert in parallel; one failing sink doesn't block the others.
 - Per-detector 5s timeout: a hanging detector surfaces a low-severity operational
   alert instead of silently blocking the pipeline.
-- 205 unit + integration tests; GitHub Actions CI on every push.
+- 215 unit + integration tests; GitHub Actions CI on every push.
 
 ### Demo
 
