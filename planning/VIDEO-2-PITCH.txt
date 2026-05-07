@@ -1,0 +1,249 @@
+╔══════════════════════════════════════════════════════════════╗
+║          CUSTOS NOX — VIDEO 2: PITCH (≤2 min)               ║
+║          Полный гайд + текст для озвучки                     ║
+╚══════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 1 — СГЕНЕРИРУЙ VEO3 ИНТРО
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Зайди на Veo3. Вставь этот промпт ТОЧНО КАК НАПИСАН:
+
+  "Dark digital space. Blockchain transactions flow as glowing
+  lines — white and blue. Slow, calm. Suddenly one red
+  transaction cuts through the others. Text appears:
+  'April 1, 2026'. Red line reaches endpoint — everything
+  stops. Text: '$285,000,000'. Slow fade to black."
+
+Скачай клип (6–8 сек). Сохрани на рабочий стол.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 2 — ПОДГОТОВЬ ЭКРАН
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Открой Chrome
+2. Адрес: C:\Projects\custos\assets\pitch-slides\deck-v2.html
+3. Нажми F11 — полный экран
+4. Пролистай стрелкой → через все 10 слайдов (смотри что анимации работают)
+5. Нажми Home — вернись на слайд 1
+6. Уведомления отключи. Все лишние окна закрой.
+7. Запусти OBS / Loom / Win+G — проверь звук
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 3 — ЗАПИСЬ (читай этот файл с другого экрана или телефона)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ВНИМАНИЕ: Начинай говорить ТОЛЬКО когда видишь слайд.
+Между слайдами делай паузу под анимацию — не торопись.
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 1 — $285M считает вверх (~1.5 сек)
+→ ПАУЗА пока цифра анимируется, потом говори:
+──────────────────────────────────────────────────────
+
+  "April 1, 2026. Drift Protocol lost $285 million
+  in twelve minutes.
+
+  This wasn't a zero-day. Nine days of on-chain
+  warnings — and zero alerts fired."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 2 — таймлайн появляется по шагам (~1.2 сек)
+→ ПАУЗА пока 4 шага появятся, потом говори:
+──────────────────────────────────────────────────────
+
+  "The attacker removed the governance timelock.
+  Weakened the multisig to one signer.
+  Armed a pre-signed drain transaction.
+
+  Every step was visible on-chain.
+  None of it was flagged."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 3 — 10,000+ считает вверх (~1.8 сек)
+→ ПАУЗА пока цифра анимируется, потом говори:
+──────────────────────────────────────────────────────
+
+  "Solana Foundation's STRIDE program monitors
+  roughly fifty protocols —
+  the top half-percent by TVL.
+
+  The other ten thousand multisigs and DAOs
+  have nothing.
+
+  That's who this is for."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 4 — карточки детекторов появляются (~0.8 сек)
+→ небольшая пауза, потом говори:
+──────────────────────────────────────────────────────
+
+  "Custos Nox is an open-source TypeScript daemon.
+  Five detectors — one per step in the Drift
+  attack chain.
+
+  Any single alert would have bought hours
+  of response time."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 5 — целевой пользователь (~5 сек, быстро)
+──────────────────────────────────────────────────────
+
+  "First users: Squads multisig operators.
+  Protocol treasuries, grant committees,
+  DAO core teams.
+
+  If you're below STRIDE's threshold —
+  this is for you."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 6 — 215 считает вверх (~1.2 сек)
+→ ПАУЗА пока цифра анимируется, потом говори:
+──────────────────────────────────────────────────────
+
+  "It's built.
+  215 tests, GitHub Actions green,
+  sub-second alert latency.
+
+  A devnet smoke harness reproduces the Drift
+  attack chain with real on-chain transactions."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 7 — шаги установки появляются (~0.8 сек)
+→ быстро, ~5 сек
+──────────────────────────────────────────────────────
+
+  "Self-host in five minutes.
+  One env variable.
+  Free Helius RPC.
+  MIT licensed — no paid tiers, ever."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 8 — GTM каналы появляются (~0.7 сек)
+──────────────────────────────────────────────────────
+
+  "Ten thousand Squads multisigs are
+  on-chain right now.
+
+  GitHub organic, Squads Discord,
+  Superteam network."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 9 — vision строки появляются (~0.7 сек)
+──────────────────────────────────────────────────────
+
+  "v1 is live — free, self-hosted.
+  v2: hosted alert feed.
+  v3: mainnet watchlist, pre-configured."
+
+→ нажми стрелку ВПРАВО
+
+
+──────────────────────────────────────────────────────
+СЛАЙД 10 — CTA → держи экран 3–4 сек
+──────────────────────────────────────────────────────
+
+  "github.com/cryptoyasenka/custos-nox
+
+  The other ten thousand DAOs on Solana
+  need a Night Guardian."
+
+→ СТОП ЗАПИСЬ
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ТАЙМИНГ (ориентир)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Veo3 intro         6–8 сек
+Слайд 1           ~14 сек
+Слайд 2           ~16 сек
+Слайд 3           ~15 сек
+Слайд 4           ~14 сек
+Слайд 5            ~9 сек
+Слайд 6           ~12 сек
+Слайд 7            ~8 сек
+Слайды 8–9        ~16 сек
+Слайд 10          ~10 сек
+────────────────────────
+Итого             ~2:00
+
+Если выходишь за 2:00 — сократи слайды 8–9
+(просто перелистни быстрее без текста).
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 4 — МОНТАЖ В CAPCUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Новый проект → формат 16:9
+2. Добавь Veo3 клип первым
+3. Добавь запись экрана следом
+4. Transition между ними → Fade (0.3–0.5 сек)
+5. Обрежь тишину в начале и конце записи
+6. Проверь общую длину — должно быть ≤2:00
+7. Export → MP4, 1080p
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 5 — ЗАГРУЗИ НА YOUTUBE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. YouTube Studio → Create → Upload video
+2. Видимость: UNLISTED (не Private!)
+3. Заголовок: Custos Nox — F2 Pitch (Solana Frontier 2026)
+4. Описание (вставь как есть):
+
+   Open-source attack detection for Solana multisigs and DAOs.
+   Live: https://custos-nox.up.railway.app
+   GitHub: https://github.com/cryptoyasenka/custos-nox
+
+5. Дождись обработки
+6. Открой ссылку в ИНКОГНИТО — убедись что видео открывается без логина
+7. Скопируй URL
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 6 — ВСТАВЬ В ARENA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+arena.colosseum.org → твой проект → Edit submission
+→ Step 2 → PITCH VIDEO → вставь YouTube URL → Save
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+КЛЮЧЕВЫЕ ФРАЗЫ — ВЫУЧИ ДО ЗАПИСИ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. "Nine days of on-chain warnings — and zero alerts fired."
+2. "The other ten thousand multisigs and DAOs have nothing."
+3. "Any single alert would have bought hours of response time."
+4. "MIT licensed — no paid tiers, ever."
+5. "The other ten thousand DAOs on Solana need a Night Guardian."

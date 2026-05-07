@@ -1,0 +1,436 @@
+╔══════════════════════════════════════════════════════════════╗
+║       CUSTOS NOX — VIDEO 3: TECH DEMO (~3 min)              ║
+║       Полный гайд + текст для озвучки                        ║
+╚══════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 1 — ПРОВЕРЬ .ENV (за 10 мин до записи)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Открой C:\Projects\custos\.env
+Убедись что там ТОЧНО такое:
+
+  CUSTOS_CLUSTER=devnet
+  CUSTOS_RPC_URL=https://api.devnet.solana.com
+  CUSTOS_WATCH=SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf:Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao,11111111111111111111111111111111:BYCMzkaGMTsPLLxzoZE8qqLb56ov6V6hnoAacgnu2KBE
+  CUSTOS_DISCORD_WEBHOOK=<твой webhook URL>
+
+АККАУНТЫ ДЛЯ КОМАНД:
+  Multisig PDA:  Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
+  Nonce pubkey:  BYCMzkaGMTsPLLxzoZE8qqLb56ov6V6hnoAacgnu2KBE
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 2 — ПРОГОНИ ВХОЛОСТУЮ (не записываешь ещё)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Терминал 1:
+  cd C:\Projects\custos
+  npm run dev
+  → жди: "subscribed to 2 accounts" (или похожее)
+
+Терминал 2:
+  npm run smoke:timelock -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
+  → в Терминале 1 должен появиться CRITICAL алерт
+
+Если алерт есть — всё работает.
+Ctrl+C в обоих терминалах. Готово к записи.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 3 — ПОДГОТОВЬ РАСКЛАДКУ ЭКРАНА
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Два терминала рядом (левый + правый), оба в C:\Projects\custos
+Шрифт терминала — максимальный (Ctrl + колёсо мыши)
+Браузер: вкладка 1 = https://custos-nox.up.railway.app
+Браузер: вкладка 2 = Discord, канал с алертами, прокрути вниз
+
+Запусти OBS / Loom / Win+G. Проверь звук.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 4 — ЗАПИСЬ (читай этот файл с телефона или второго экрана)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Каждый блок: сначала ГОВОРИ, потом ВВОДИ команду.
+После каждой команды — пауза 3–5 сек пока daemon отвечает.
+
+
+──────────────────────────────────────────────────────
+[0:00–0:22] ОТКРОЙ БРАУЗЕР, вкладка dashboard
+──────────────────────────────────────────────────────
+
+  ГОВОРИ:
+
+  "On April 1, 2026, Drift Protocol lost $285 million
+  in twelve minutes.
+
+  It wasn't a zero-day exploit. The attacker spent nine
+  days preparing on-chain — changing governance settings,
+  weakening the multisig, arming a pre-signed transaction.
+
+  Every step was visible on-chain.
+  None of it was flagged.
+
+  This is Custos Nox.
+  It catches that attack chain — in real time."
+
+Прокрути вниз до секции Drift Timeline (4 карточки видны).
+
+  ГОВОРИ:
+
+  "Here's what that nine-day window looked like.
+  Four steps. Four detectors.
+  I'm going to trigger each one right now."
+
+
+──────────────────────────────────────────────────────
+[0:22–0:38] ПЕРЕКЛЮЧИСЬ НА ДВА ТЕРМИНАЛА (Alt+Tab)
+──────────────────────────────────────────────────────
+
+Запусти daemon в ЛЕВОМ терминале:
+
+  КОМАНДА:
+  npm run dev
+
+  Жди строк подписки (2–3 сек).
+
+  ГОВОРИ:
+
+  "Custos Nox is a TypeScript daemon — TypeScript by
+  design, so any JS developer can read, audit, and
+  contribute without a Solana dev environment.
+
+  It subscribes to account changes over WebSocket.
+  Every update runs through five detectors.
+  Any match fans out to Discord, Slack, Telegram,
+  and stdout — all in parallel.
+  215 tests. CI on every push.
+
+  Left terminal: Custos Nox, the defender.
+  Right terminal: me, the attacker.
+  Watch the left."
+
+
+──────────────────────────────────────────────────────
+[0:38–1:00] ДЕТЕКТОР 1 — ПРАВЫЙ ТЕРМИНАЛ
+──────────────────────────────────────────────────────
+
+  ГОВОРИ (сначала):
+
+  "Step one of the Drift attack: remove the governance
+  timelock.
+
+  The timelock is what gives a DAO time to react.
+  On mainnet Drift it was dropped to zero six days
+  before the drain — closing the community's window
+  to pause withdrawals or vote to cancel.
+
+  TimelockRemovalDetector fires the moment that happens."
+
+  КОМАНДА:
+  npm run smoke:timelock -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
+
+  → жди 3–5 сек → в левом терминале CRITICAL алерт
+
+  ГОВОРИ:
+
+  "CRITICAL.
+  Timelock was 86,400 seconds — one day.
+  Now zero.
+  The DAO has no buffer left.
+
+  The alert includes a direct Solscan link
+  and the exact values that changed."
+
+
+──────────────────────────────────────────────────────
+[1:00–1:20] ДЕТЕКТОР 2 — ПРАВЫЙ ТЕРМИНАЛ
+──────────────────────────────────────────────────────
+
+  ГОВОРИ (сначала):
+
+  "Step two: weaken the multisig threshold.
+
+  A 3-of-5 multisig means three signers must
+  approve any transaction.
+  The attacker reduced it to 1-of-5 —
+  they only need themselves to sign anything.
+  That's the moment the treasury became a single
+  point of failure.
+
+  MultisigWeakeningDetector catches any threshold
+  reduction."
+
+  КОМАНДА:
+  npm run smoke:weaken -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
+
+  → жди 3–5 сек → HIGH алерт
+
+  ГОВОРИ:
+
+  "HIGH. 3-of-5 → 1-of-5.
+  One person now controls the entire treasury.
+
+  If you received this alert, you'd have hours to
+  rotate signers before the attacker moves to
+  the next step."
+
+
+──────────────────────────────────────────────────────
+[1:20–1:42] ДЕТЕКТОР 3 — ПРАВЫЙ ТЕРМИНАЛ
+──────────────────────────────────────────────────────
+
+  ГОВОРИ (сначала):
+
+  "Step three — and this is the clever part
+  of the Drift attack:
+  the attacker creates a durable nonce account
+  under their own key.
+
+  A durable nonce lets you pre-sign a transaction
+  that stays valid indefinitely —
+  it executes whenever the attacker decides,
+  not when the DAO is ready.
+
+  This is the moment the drain was actually armed.
+
+  PrivilegedNonceDetector fires when a watched nonce
+  account is initialized under an attacker-controlled
+  authority."
+
+  КОМАНДА:
+  npm run smoke:nonce-init
+
+  → жди 3–5 сек → CRITICAL алерт
+
+  ГОВОРИ:
+
+  "CRITICAL. Nonce initialized.
+  A pre-signed drain transaction is now live
+  and waiting — it can execute at any moment.
+
+  On mainnet Drift, this happened nine days
+  before the actual drain."
+
+
+──────────────────────────────────────────────────────
+[1:42–2:00] ДЕТЕКТОР 5 — ПРАВЫЙ ТЕРМИНАЛ
+──────────────────────────────────────────────────────
+
+  ГОВОРИ (сначала):
+
+  "The fifth detector covers an adjacent attack vector —
+  not the Drift chain specifically, but one that's hit
+  other Solana protocols.
+
+  An attacker with config authority rewrites the members
+  list: evicts a legitimate co-signer, adds their own key.
+  The threshold stays the same on paper, but the quorum
+  is now compromised.
+
+  SignerSetChangeDetector fires on any members vector
+  mutation."
+
+  КОМАНДА:
+  npm run smoke:rotate-signers -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
+
+  → жди 3–5 сек → HIGH алерт
+
+  ГОВОРИ:
+
+  "HIGH. Legitimate signer removed, attacker key added.
+  Same baseline-diff machinery — one extra detector
+  covering a second attack shape for free."
+
+
+──────────────────────────────────────────────────────
+[2:00–2:12] ПЕРЕКЛЮЧИСЬ НА DISCORD (Alt+Tab)
+──────────────────────────────────────────────────────
+
+  ГОВОРИ:
+
+  "Every one of those four alerts landed in Discord
+  simultaneously — severity color-coded, Solscan link,
+  exact values before and after.
+
+  The fan-out is parallel: Discord, Slack, Telegram,
+  and stdout all fire at once.
+  One failing webhook never blocks the others.
+
+  A team watching this channel would have had actionable
+  alerts for every step of the Drift chain."
+
+Медленно прокрути через все 4 embed'а — 3–4 сек.
+
+
+──────────────────────────────────────────────────────
+[2:12–2:25] ВЕРНИСЬ В ПРАВЫЙ ТЕРМИНАЛ
+──────────────────────────────────────────────────────
+
+  ГОВОРИ (сначала):
+
+  "The fourth Drift-chain detector —
+  StaleNonceExecutionDetector —
+  catches the drain itself: when a pre-signed transaction
+  finally executes from a nonce that was seeded more
+  than an hour ago.
+
+  Can't trigger that live without waiting an hour.
+  But twelve unit tests cover the exact Drift pattern."
+
+  КОМАНДА:
+  npm test src/detectors/stale-nonce-execution
+
+  → жди "12 passing"
+
+  ГОВОРИ:
+
+  "All green.
+  That's the final step —
+  the moment $285M left the protocol."
+
+
+──────────────────────────────────────────────────────
+[2:25–2:47] ПЕРЕКЛЮЧИСЬ НА БРАУЗЕР — секция "Self-host in 5 minutes"
+──────────────────────────────────────────────────────
+
+  ГОВОРИ:
+
+  "How does a DAO actually use this?
+
+  You have a Squads multisig. The PDA is visible
+  in app.squads.so — it's just an address,
+  like a wallet address.
+  You put that address in one environment variable:
+  CUSTOS_WATCH.
+  Add a Discord, Slack, or Telegram webhook.
+  Run npm run dev, or the Docker one-liner.
+
+  From that moment, any config change on your multisig —
+  threshold, signers, timelock, nonce —
+  fires an immediate alert in your team's channel.
+  You don't need to check anything manually.
+  If something changes, you hear about it
+  within a second."
+
+Покажи code block (git clone → npm install → cp .env → npm run dev).
+
+  ГОВОРИ:
+
+  "Five minutes.
+  Free Helius RPC, no credit card.
+  MIT licensed, no paid tiers."
+
+
+──────────────────────────────────────────────────────
+[2:47–3:00] ПРОКРУТИ К FOOTER — GitHub URL виден
+──────────────────────────────────────────────────────
+
+  ГОВОРИ:
+
+  "Solana Foundation's STRIDE program monitors protocols
+  with ten million in TVL or above.
+  That covers maybe fifty protocols.
+
+  The other ten thousand multisigs and DAOs on Solana
+  have nothing.
+
+  Custos Nox is for them.
+
+  github.com/cryptoyasenka/custos-nox"
+
+→ Держи на GitHub URL 2 сек.
+→ СТОП ЗАПИСЬ.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ТАЙМИНГ (ориентир)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Открытие + dashboard        0:22
+Терминалы + daemon          0:16
+Детектор 1 (timelock)       0:22
+Детектор 2 (weakening)      0:20
+Детектор 3 (nonce)          0:22
+Детектор 5 (signers)        0:18
+Discord — 4 алерта          0:12
+Детектор 4 — тесты          0:13
+Как использовать            0:22
+Закрытие                    0:13
+──────────────────────────
+Итого                       ~3:00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 5 — ЗАГРУЗИ (два места)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LOOM (обязательно — требование Superteam UA):
+  1. Загрузи видео в Loom
+  2. Заголовок: Custos Nox — F3 Tech Demo (Solana Frontier 2026)
+  3. Скопируй Loom URL → сохрани
+
+YOUTUBE (обязательно — для Arena):
+  1. YouTube Studio → Upload → UNLISTED (не Private!)
+  2. Заголовок: Custos Nox — F3 Tech Demo (Solana Frontier 2026)
+  3. Описание:
+
+     Custos Nox — real-time attack detection for Solana multisigs.
+     This demo reproduces the Drift Protocol April 2026 attack chain
+     live on devnet: 4 detectors firing in real time.
+     Live: https://custos-nox.up.railway.app
+     GitHub: https://github.com/cryptoyasenka/custos-nox
+
+  4. Дождись обработки
+  5. Открой в ИНКОГНИТО — убедись что открывается без логина
+  6. Скопируй YouTube URL → сохрани
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 6 — ВСТАВЬ URL В ДВА МЕСТА
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ARENA A11:
+  arena.colosseum.org → твой проект → Edit submission
+  → Step 2 → PRODUCT DEMO VIDEO → вставь YOUTUBE URL → Save
+
+SUPERTEAM EARN:
+  https://superteam.fun/earn/listing/frontier-hackathon-ukrainian-track
+  → в форме вставь LOOM URL
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ЕСЛИ ЧТО-ТО ПОШЛО НЕ ТАК
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Daemon не показывает алерт →
+  Подожди 7–10 сек. Devnet RPC иногда медленный.
+
+smoke:nonce-init выдаёт ошибку "account already exists" →
+  Аккаунт уже создан. Запусти:
+    npm run smoke:nonce-plan
+  Скопируй новый pubkey → обнови CUSTOS_WATCH в .env → рестартни daemon.
+
+Discord не получает алерты →
+  Проверь CUSTOS_DISCORD_WEBHOOK в .env (без кавычек, полный URL).
+  Рестартни daemon (Ctrl+C → npm run dev).
+
+Запись вышла за 3:10 →
+  В редакторе обрежь паузы ожидания RPC — они могут быть 5–8 сек.
+  Допустимо до 3:15, судьи поймут.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+КЛЮЧЕВЫЕ ФРАЗЫ — ВЫУЧИ ДО ЗАПИСИ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. "Every step was visible on-chain. None of it was flagged."
+2. "The timelock is what gives a DAO time to react."
+3. "This is the moment the drain was actually armed."
+4. "A team watching this channel would have had actionable
+   alerts for every step of the Drift chain."
+5. "You put that address in one environment variable."
+6. "The other ten thousand multisigs and DAOs on Solana
+   have nothing."
