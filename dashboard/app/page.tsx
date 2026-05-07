@@ -82,6 +82,11 @@ export default function Home() {
                 It detects every on-chain step of the $285M Drift drain on April 1, 2026 — plus an
                 adjacent signer-rotation vector — before the stolen funds leave the chain.
               </p>
+              <div className="max-w-2xl rounded-lg border border-border bg-surface px-4 py-3 font-mono text-sm text-muted-strong">
+                <span className="text-foreground">Solana Foundation&apos;s STRIDE program</span> monitors protocols with $10M+ TVL — roughly 50 protocols.{" "}
+                <span className="text-accent">The other 10,000+ multisigs and DAOs have nothing.</span>{" "}
+                Custos Nox is for them.
+              </div>
               <div className="flex flex-wrap gap-3">
                 <a
                   href={GITHUB_URL}
@@ -148,6 +153,44 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="border-b border-border bg-surface/40">
+          <div className="mx-auto w-full max-w-5xl px-6 py-16">
+            <div className="mb-10 flex flex-col gap-3">
+              <h2 className="text-3xl font-semibold tracking-tight">Who should run this</h2>
+              <p className="max-w-2xl text-muted-strong">
+                If you control a Squads multisig or an SPL Governance realm, Custos Nox watches it
+                for you. Setup takes five minutes.
+              </p>
+            </div>
+            <div className="grid gap-5 sm:grid-cols-3">
+              <div className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5">
+                <div className="font-mono text-[11px] uppercase tracking-wider text-accent">DAO treasuries</div>
+                <p className="text-sm leading-relaxed text-muted-strong">
+                  Your multisig PDA is one environment variable. Add a Discord or Slack webhook.
+                  Any threshold change, timelock removal, or signer rotation fires an alert to your
+                  team within a second.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5">
+                <div className="font-mono text-[11px] uppercase tracking-wider text-accent">Grant committees</div>
+                <p className="text-sm leading-relaxed text-muted-strong">
+                  Grant multisigs often have fewer signers and less oversight than protocol
+                  treasuries. Custos Nox gives them the same real-time coverage as a full-time
+                  security team — for free.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5">
+                <div className="font-mono text-[11px] uppercase tracking-wider text-accent">Security researchers</div>
+                <p className="text-sm leading-relaxed text-muted-strong">
+                  Point Custos Nox at any set of Squads or SPL Governance accounts and get
+                  real-time feed of config changes. Useful for monitoring suspicious multisigs or
+                  building public watchdog dashboards.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section id="timeline" className="border-b border-border">
           <div className="mx-auto w-full max-w-5xl px-6 py-20">
             <div className="mb-10 flex flex-col gap-3">
@@ -166,14 +209,15 @@ export default function Home() {
         <section id="live" className="border-b border-border">
           <div className="mx-auto w-full max-w-5xl px-6 py-20">
             <div className="mb-10 flex flex-col gap-3">
-              <h2 className="text-3xl font-semibold tracking-tight">Attack chain replay</h2>
+              <h2 className="text-3xl font-semibold tracking-tight">Attack simulation — what the alerts look like</h2>
               <p className="max-w-2xl text-muted-strong">
-                All four Drift attack steps replayed against a devnet harness, plus an adjacent
-                signer-rotation event. Each fires a distinct detector within a second — the Drift
-                sequence is the one that went undetected on mainnet in April 2026.
+                These are sample alerts from a devnet attack simulation: we reproduced every step of
+                the Drift April 2026 attack chain on-chain, with Custos Nox watching. Each step
+                fired a distinct detector within a second. The same simulation runs live in the
+                tech demo video.
               </p>
               <p className="max-w-2xl font-mono text-xs uppercase tracking-wider text-muted">
-                ⚠ Not live mainnet data — sample events for demo purposes
+                ⚠ Devnet simulation — not live mainnet data. Real alerts on your multisig look identical.
               </p>
             </div>
             <div className="grid gap-6 lg:grid-cols-[320px_1fr]">

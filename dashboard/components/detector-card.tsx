@@ -3,6 +3,7 @@ import { SeverityBadge } from "./severity-badge";
 
 export function DetectorCard({ detector }: { detector: DetectorMeta }) {
   const isRoadmap = detector.status === "roadmap";
+  const isAdjacent = detector.chainLabel === "Adjacent vector";
   return (
     <div
       className={`flex flex-col gap-3 rounded-lg border p-5 transition-colors ${
@@ -12,7 +13,18 @@ export function DetectorCard({ detector }: { detector: DetectorMeta }) {
       }`}
     >
       <div className="flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0 flex-1">
+          <div className="mb-1.5 flex items-center gap-2">
+            <span
+              className={`inline-flex items-center rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider ${
+                isAdjacent
+                  ? "bg-surface-elevated text-muted"
+                  : "bg-accent/10 text-accent"
+              }`}
+            >
+              {detector.chainLabel}
+            </span>
+          </div>
           <h3 className="font-semibold tracking-tight">{detector.name}</h3>
           <p className="mt-0.5 text-xs text-muted">{detector.subtitle}</p>
         </div>
@@ -29,6 +41,12 @@ export function DetectorCard({ detector }: { detector: DetectorMeta }) {
         {detector.attackStep}
       </div>
       <p className="text-sm leading-relaxed text-muted-strong">{detector.description}</p>
+      <div className="border-t border-border pt-3">
+        <p className="font-mono text-[11px] text-muted">
+          <span className="text-muted-strong">if undetected · </span>
+          {detector.impact}
+        </p>
+      </div>
     </div>
   );
 }

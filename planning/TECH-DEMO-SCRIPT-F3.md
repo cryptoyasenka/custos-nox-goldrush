@@ -9,15 +9,15 @@
 
 ## PRE-RECORDING SETUP (10 min)
 
-**Accounts (already created):**
-- Multisig PDA: `Cm1iFQwExc7LUB1TUZTtcpbrG4W5qwM9T5TkMMCsREY5`
+**Accounts (fresh, created 2026-05-07 for recording):**
+- Multisig PDA: `Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao`
 - Nonce pubkey: `BYCMzkaGMTsPLLxzoZE8qqLb56ov6V6hnoAacgnu2KBE`
 
 **.env must have:**
 ```
 CUSTOS_CLUSTER=devnet
 CUSTOS_RPC_URL=https://api.devnet.solana.com
-CUSTOS_WATCH=SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf:Cm1iFQwExc7LUB1TUZTtcpbrG4W5qwM9T5TkMMCsREY5,11111111111111111111111111111111:BYCMzkaGMTsPLLxzoZE8qqLb56ov6V6hnoAacgnu2KBE
+CUSTOS_WATCH=SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf:Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao,11111111111111111111111111111111:BYCMzkaGMTsPLLxzoZE8qqLb56ov6V6hnoAacgnu2KBE
 CUSTOS_DISCORD_WEBHOOK=<your webhook>
 ```
 
@@ -56,14 +56,20 @@ I'm going to trigger each one right now."
 
 ---
 
-### [0:22–0:35] — Switch to terminals
+### [0:22–0:38] — Switch to terminals — frame the simulation
 
 *(Switch to two-terminal layout)*
 
-"The daemon is running in the left terminal, subscribed via WebSocket
-to a Squads multisig and a durable nonce account on devnet.
-It has already seeded baseline state — so the first account change
-will be caught and diffed correctly."
+"I'm going to simulate the Drift attack right now — step by step, on devnet.
+
+In the left terminal: Custos Nox, watching a Squads multisig and a nonce account.
+That's the defender's side — a DAO running this tool in their Discord.
+
+In the right terminal: me, playing the role of the attacker —
+running the same sequence of on-chain operations that drained Drift.
+
+The daemon has already seeded baseline state for both accounts.
+Watch what happens to the left terminal with each move."
 
 ---
 
@@ -81,7 +87,7 @@ TimelockRemovalDetector fires the moment that happens."
 
 *(Type and Enter:)*
 ```
-npm run smoke:timelock -- Cm1iFQwExc7LUB1TUZTtcpbrG4W5qwM9T5TkMMCsREY5
+npm run smoke:timelock -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
 ```
 *(wait 3–4 sec for confirmation)*
 
@@ -103,7 +109,7 @@ MultisigWeakeningDetector catches any threshold reduction."
 
 *(Type and Enter:)*
 ```
-npm run smoke:weaken -- Cm1iFQwExc7LUB1TUZTtcpbrG4W5qwM9T5TkMMCsREY5
+npm run smoke:weaken -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
 ```
 *(wait)*
 
@@ -150,7 +156,7 @@ SignerSetChangeDetector fires on any members vector mutation."
 
 *(Type and Enter:)*
 ```
-npm run smoke:rotate-signers -- Cm1iFQwExc7LUB1TUZTtcpbrG4W5qwM9T5TkMMCsREY5
+npm run smoke:rotate-signers -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
 ```
 *(wait)*
 
@@ -239,7 +245,7 @@ github.com/cryptoyasenka/custos-nox"
 | Section | ~Sec | On screen |
 |---------|------|-----------|
 | Opening + Drift timeline | 0:22 | Browser |
-| Transition to terminals | 0:13 | Terminals |
+| Transition + attack framing | 0:16 | Terminals |
 | Detector 1: timelock | 0:23 | Terminal |
 | Detector 2: weakening | 0:20 | Terminal |
 | Detector 3: nonce | 0:20 | Terminal |
