@@ -88,7 +88,11 @@ export function LiveFeed() {
           <StatusDot status={useReal ? "green" : feed.reachable ? "green" : "yellow"} />
           <span className="font-mono text-[11px] uppercase tracking-wider text-muted-strong">
             Watching {WATCHLIST.length} Solana DAOs in real time
-            {!feed.reachable && feed.error ? " · daemon offline, showing devnet sample" : ""}
+            {useReal
+              ? ""
+              : !feed.reachable && feed.error
+                ? " · daemon offline, showing demo data"
+                : " · 0 mainnet events, alert feed below shows demo data"}
           </span>
         </div>
       </div>
@@ -101,15 +105,30 @@ export function LiveFeed() {
 
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
         <div className="rounded-lg border border-border bg-surface p-5">
-          <SeverityChart alerts={renderedAlerts} />
+          <SeverityChart alerts={renderedAlerts} isDemo={!useReal} />
         </div>
         <div className="overflow-hidden rounded-lg border border-border bg-surface">
           <div className="flex items-center justify-between border-b border-border bg-surface-elevated px-4 py-2.5">
             <span className="font-mono text-[11px] uppercase tracking-wider text-muted">
-              Alert feed · {cluster}
+              {useReal ? `Alert feed · ${cluster}` : "Alert feed · demo (devnet sample)"}
             </span>
             <span className="font-mono text-[11px] text-muted">{labelText}</span>
           </div>
+          {!useReal && (
+            <div className="border-b border-yellow-500/30 bg-yellow-500/[0.07] px-4 py-3">
+              <div className="flex items-start gap-2">
+                <span className="mt-0.5 rounded bg-yellow-500/20 px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-yellow-300">
+                  Demo
+                </span>
+                <p className="text-xs leading-relaxed text-muted-strong">
+                  No mainnet events yet — these 5 rows are devnet samples showing what the
+                  feed looks like under attack. Daemon is watching{" "}
+                  <span className="text-foreground">{WATCHLIST.length} mainnet DAOs</span>{" "}
+                  live; quiet feed is the expected steady state.
+                </p>
+              </div>
+            </div>
+          )}
           <ul className="divide-y divide-border">
             {renderedAlerts.map((alert, i) => (
               <AlertRow key={`${alert.detector}-${alert.minutesAgo}-${i}`} alert={alert} />

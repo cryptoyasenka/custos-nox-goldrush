@@ -16,7 +16,13 @@ const labels: Record<AlertSeverity, string> = {
   low: "Low",
 };
 
-export function SeverityChart({ alerts }: { alerts: SampleAlert[] }) {
+export function SeverityChart({
+  alerts,
+  isDemo = false,
+}: {
+  alerts: SampleAlert[];
+  isDemo?: boolean;
+}) {
   const counts = ORDER.map((sev) => ({
     severity: sev,
     count: alerts.filter((a) => a.severity === sev).length,
@@ -25,6 +31,16 @@ export function SeverityChart({ alerts }: { alerts: SampleAlert[] }) {
 
   return (
     <div className="flex h-full flex-col">
+      <div className="mb-3 flex items-center justify-between">
+        <span className="font-mono text-[11px] uppercase tracking-wider text-muted">
+          Severity breakdown
+        </span>
+        {isDemo && (
+          <span className="rounded bg-yellow-500/20 px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-yellow-300">
+            Demo
+          </span>
+        )}
+      </div>
       <div className="flex items-end justify-between gap-3">
         {counts.map(({ severity, count }) => {
           const heightPct = (count / maxCount) * 100;
@@ -51,7 +67,7 @@ export function SeverityChart({ alerts }: { alerts: SampleAlert[] }) {
         })}
       </div>
       <p className="mt-4 text-center text-xs text-muted">
-        Severity breakdown — {alerts.length} sample events
+        {isDemo ? `${alerts.length} demo events` : `${alerts.length} live events`}
       </p>
     </div>
   );
