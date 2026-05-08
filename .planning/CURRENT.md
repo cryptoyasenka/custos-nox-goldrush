@@ -1,6 +1,15 @@
 # CURRENT — custos (Custos Nox)
 
-**Last touched:** 2026-05-09 ~02:35 — NIGHT AUDIT done (`.planning/AUDIT-NIGHT-2026-05-09.md`). 🔴 CRITICAL: Helius API key утёк в public git (`planning/F3-RECORDING-OPTIONS.md` line 60, commit deb510d). Yana утром: reroll Helius ключ + Railway env update + sanitize file. Подробности в AUDIT-NIGHT.
+**Last touched:** 2026-05-09 ~02:50 — NIGHT AUDIT + autonomous verification iteration 1 (HEAD=`76528c1`). 🔴 CRITICAL: Helius API key утёк в public git (`planning/F3-RECORDING-OPTIONS.md` line 60, commit deb510d). Yana утром: reroll Helius ключ + Railway env update + sanitize file. Подробности в AUDIT-NIGHT-2026-05-09.md.
+
+**Autonomous verification done this night** (analysis only, без правок кода):
+- ✅ Все артефакты submit на диске (deck-v2.html, 9 F2 mp3, F3 v5 script, 9 F3 mp3, Veo3 intro, ARENA-COPY)
+- ✅ Live URLs работают: daemon /health watching:12, dashboard HTTP 200 с DEMO badges
+- ✅ Tests 228/228 green (vitest 4.99s)
+- ✅ Daemon URL правильно зашит в dashboard JS bundle, CSP корректный
+- ✅ Secret sweep чистый кроме известного Helius leak'а
+- ✅ Audit file санитайзнут от inline ключа (commit 0cc1b82)
+- 🟡 Замечен 1 daemon restart blip (uptime 398→51s) — Yana проверить `curl /health` дважды перед F3 recording. Если 2 рестарта подряд — local daemon (F3-RECORDING-OPTIONS.md вариант B).
 **Status:** F2/F3 content-ready + URL swap complete. Two Railway services live in same project:
 - **Dashboard (visit card for judges):** `https://custos-nox.up.railway.app` → Next.js 16 standalone, polls daemon, shows hero + install + 5 detectors + #live monitor
 - **Daemon (API):** `https://custos-daemon.up.railway.app/health` → `{ok:true, watching:12, ...}`, Helius mainnet RPC, HTTP sink serving `/health` + `/events`
