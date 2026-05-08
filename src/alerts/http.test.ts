@@ -114,6 +114,18 @@ describe("HttpEventSink", () => {
     expect(res.status).toBe(404);
   });
 
+  it("serves an HTML landing page on GET /", async () => {
+    await sink.start();
+    const res = await fetch(`http://127.0.0.1:${port(sink)}/`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type")).toContain("text/html");
+    const body = await res.text();
+    expect(body).toContain("Custos Nox");
+    expect(body).toContain("watching");
+    expect(body).toContain("/health");
+    expect(body).toContain("/events");
+  });
+
   it("handles CORS preflight (OPTIONS) with 204 + headers", async () => {
     await sink.start();
     const res = await fetch(`http://127.0.0.1:${port(sink)}/events`, { method: "OPTIONS" });
