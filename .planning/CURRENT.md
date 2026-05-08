@@ -1,9 +1,10 @@
 # CURRENT — custos (Custos Nox)
 
 **Last touched:** 2026-05-08
-**Status:** F2 deck v2 cleaned (no periods in taglines, 5 detector cards, Telegram in fan-out); slides.webm v2 generated (~109s). Awaiting Yana's recording session (deadline May 10 23:59 PDT)
+**Status:** F2 deck v2 cleaned (no periods in taglines, 5 detector cards, Telegram in fan-out); slides.webm v2 generated (~109s). Judge-eye review done 2026-05-08 → 5 improvements identified (see PITCH-DECK-REVIEW-2026-05-08.md), pending Yana's go-ahead. Deadline May 10 23:59 PDT
 
 ## Open files
+- `.planning/PITCH-DECK-REVIEW-2026-05-08.md` — judge-eye audit + 5 concrete improvements (saved 2026-05-08, not yet applied)
 - `planning/VIDEO-2-PITCH.txt` — F2 pipeline (Playwright record + AI voice + CapCut)
 - `planning/VIDEO-3-DEMO.txt` — F3 pipeline (live demo + architecture overlay)
 - `planning/PITCH-SCRIPT-F2.md` — English narration source (8 slides)
