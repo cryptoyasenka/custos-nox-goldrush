@@ -4,7 +4,8 @@
 **Status:** F2 deck v2 fully polished — все 5 judge-eye улучшений ВНЕДРЕНЫ (s1 product reveal + s4 daemon type + Discord mockup proof-card + Public Goods badge + founder footer + s6-url period fix). 8 анимированных слайдов записаны отдельно в `video-build/f2/slides-individual/slide-{1..8}.webm` для CapCut sequencing. Deadline May 10 23:59 PDT
 
 ## Open files
-- `.planning/PITCH-DECK-REVIEW-2026-05-08.md` — judge-eye audit + 5 concrete improvements (saved 2026-05-08, not yet applied)
+- `.planning/SESSION-2026-05-08-COMPLETE.md` — full session log (3 commits, 5+1 fixes, decisions, what's next) — READ FIRST on resume
+- `.planning/PITCH-DECK-REVIEW-2026-05-08.md` — judge-eye audit (now all 5 improvements APPLIED in commit c13c15a)
 - `planning/VIDEO-2-PITCH.txt` — F2 pipeline (Playwright record + AI voice + CapCut)
 - `planning/VIDEO-3-DEMO.txt` — F3 pipeline (live demo + architecture overlay)
 - `planning/PITCH-SCRIPT-F2.md` — English narration source (8 slides)
