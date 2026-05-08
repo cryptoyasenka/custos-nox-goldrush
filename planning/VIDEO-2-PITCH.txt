@@ -109,11 +109,11 @@
 
 
 ──────────────────────────────────────────────────────
-СЛАЙД 5 — 215 считает вверх (~1.2 сек) + killer line
+СЛАЙД 5 — 200+ считает вверх (~1.2 сек) + killer line
 → ПАУЗА пока цифра анимируется, потом говори (~14 сек):
 ──────────────────────────────────────────────────────
 
-  "It's built. Two-hundred-fifteen tests,
+  "It's built. Over two hundred tests,
   sub-second alert latency, MIT licensed.
 
   If Drift had this on March 23rd,

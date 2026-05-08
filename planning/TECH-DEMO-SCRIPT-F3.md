@@ -64,13 +64,19 @@ Custos Nox is that tool."
 
 Timelock removal. Multisig weakening. Privileged nonce. Stale nonce execution.
 
-Any single one firing would have given the DAO days to respond.
-
-Let me run that attack right now — live, on devnet."
+Any single one firing would have given the DAO days to respond."
 
 ---
 
-### [0:45–0:58] — Switch to terminals
+### [0:45–0:55] — Architecture overlay (10 sec)
+
+*(In CapCut: overlay `architecture.html` recording with fade in/out. No screen-cut from the host video — the diagram simply replaces the frame for 10 seconds.)*
+
+"WebSocket subscription to Solana RPC. Five detectors run in parallel on every event. When one fires, fan-out to Discord, Slack, and console — none of them block the others. Sub-second alert latency end to end."
+
+---
+
+### [0:55–1:05] — Switch to terminals
 
 *(Switch to two-terminal layout)*
 
@@ -82,7 +88,7 @@ Watch the left terminal."
 
 ---
 
-### [0:58–1:15] — Detector 1: Timelock
+### [1:05–1:22] — Detector 1: Timelock
 
 "The attacker's first move: remove the governance timelock. The timelock is the DAO's reaction window — the time the community has to notice something is wrong and respond."
 
@@ -96,7 +102,7 @@ npm run smoke:timelock -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
 
 ---
 
-### [1:15–1:30] — Detector 2: Multisig Weakening
+### [1:22–1:37] — Detector 2: Multisig Weakening
 
 "Next: weaken the multisig. Change the rule from 'three people must approve' to 'one person must approve'. The treasury is now under single-signer control."
 
@@ -110,7 +116,7 @@ npm run smoke:weaken -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
 
 ---
 
-### [1:30–1:45] — Detector 3: Privileged Nonce
+### [1:37–1:52] — Detector 3: Privileged Nonce
 
 "Third: create a durable nonce under an attacker-controlled key. This lets you pre-sign a transaction that stays valid forever — and execute it whenever you want. This is the moment the drain was armed."
 
@@ -124,7 +130,7 @@ npm run smoke:nonce-init
 
 ---
 
-### [1:45–1:58] — Detector 5: Signer Rotation
+### [1:52–2:05] — Detector 5: Signer Rotation
 
 "And one more — not from the Drift attack specifically, but from similar exploits: the attacker silently swaps out a legitimate co-signer for their own key. The threshold looks the same. The quorum is not."
 
@@ -138,7 +144,7 @@ npm run smoke:rotate-signers -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
 
 ---
 
-### [1:58–2:14] — Discord — full screen
+### [2:05–2:21] — Discord — full screen
 
 *(Switch to Discord, maximized)*
 
@@ -154,21 +160,21 @@ Discord, Slack, and terminal all fire simultaneously. One failing webhook never 
 
 ---
 
-### [2:14–2:22] — Detector 4: Stale Nonce Execution (tests)
+### [2:21–2:29] — Detector 4: Stale Nonce Execution (tests)
 
 *(Switch back to right terminal)*
 
-"The fourth Drift-chain detector catches the drain itself — when the pre-signed transaction executes from a stale nonce. Twelve unit tests cover the exact Drift pattern, all green."
+"The fourth Drift-chain detector catches the drain itself — when the pre-signed transaction executes from a stale nonce. Fourteen unit tests cover the exact Drift pattern, all green."
 
 *(Type and Enter:)*
 ```
 npm test src/detectors/stale-nonce-execution
 ```
-*(wait for "12 passing")*
+*(wait for "14 passing")*
 
 ---
 
-### [2:22–2:45] — How to set this up
+### [2:29–2:45] — How to set this up (compressed to fit architecture overlay budget)
 
 *(Switch to browser — "Self-host in 5 minutes" section)*
 
@@ -208,18 +214,19 @@ github.com/cryptoyasenka/custos-nox"
 |---------|------|-----------|
 | 0:00–0:30 What's a DAO treasury | 0:30 | Browser hero + Drift Timeline |
 | 0:30–0:45 The detectors on the site | 0:15 | Browser detector cards |
-| 0:45–0:58 Switch to terminals | 0:13 | Two-terminal layout |
-| 0:58–1:15 Detector 1 Timelock | 0:17 | Terminal |
-| 1:15–1:30 Detector 2 Weakening | 0:15 | Terminal |
-| 1:30–1:45 Detector 3 Nonce | 0:15 | Terminal |
-| 1:45–1:58 Detector 5 Signer Rotation | 0:13 | Terminal |
-| 1:58–2:14 Discord — 4 embeds | 0:16 | Discord |
-| 2:14–2:22 Detector 4 stale-nonce tests | 0:08 | Terminal |
-| 2:22–2:45 Setup walkthrough | 0:23 | Browser |
+| 0:45–0:55 Architecture overlay | 0:10 | architecture.html (CapCut overlay) |
+| 0:55–1:05 Switch to terminals | 0:10 | Two-terminal layout |
+| 1:05–1:22 Detector 1 Timelock | 0:17 | Terminal |
+| 1:22–1:37 Detector 2 Weakening | 0:15 | Terminal |
+| 1:37–1:52 Detector 3 Nonce | 0:15 | Terminal |
+| 1:52–2:05 Detector 5 Signer Rotation | 0:13 | Terminal |
+| 2:05–2:21 Discord — 4 embeds | 0:16 | Discord |
+| 2:21–2:29 Detector 4 stale-nonce tests | 0:08 | Terminal |
+| 2:29–2:45 Setup walkthrough (compressed) | 0:16 | Browser |
 | 2:45–3:00 Close | 0:15 | Browser |
 | **Total** | **~3:00** | |
 
-75% live product (browser + terminal + Discord). 25% explanation (the first 30s + setup walkthrough).
+70% live product (browser + terminal + Discord). 25% explanation. 5% architecture overlay (covers the "if not visual — diagrams" guide requirement).
 
 ---
 

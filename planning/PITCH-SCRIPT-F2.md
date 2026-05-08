@@ -58,7 +58,7 @@
 
 *(pause for 215 count-up ~1.2 sec)*
 
-"It's built. Two-hundred-fifteen tests, sub-second alert latency, MIT licensed. If Drift had this on March 23rd, the first CRITICAL alert would have fired nine days before the drain."
+"It's built. Over two hundred tests, sub-second alert latency, MIT licensed. If Drift had this on March 23rd, the first CRITICAL alert would have fired nine days before the drain."
 
 ---
 
@@ -89,7 +89,7 @@
 | Slide 2 (Chainalysis chain) | 16 |
 | Slide 3 (gap) | 14 |
 | Slide 4 (solution) | 13 |
-| Slide 5 (proof + stakes) | 14 |
+| Slide 5 (proof + stakes, 200+ count-up) | 14 |
 | Slide 6 (setup + GTM) | 14 |
 | Slide 7 (vision) | 12 |
 | Slide 8 (close) | 10 |
@@ -129,7 +129,7 @@ CapCut: Veo3 clip → 6–8 sec → cut to slide recording starting at Slide 1.
 - Pause 1.5 sec on slide 1 while $285M counts up
 - Pause on slide 2 for the stagger (~1.2 sec for all 4 steps)
 - Pause on slide 3 for the 10,000+ count-up (~1.8 sec)
-- Pause on slide 5 for the 215 count-up (~1.2 sec)
+- Pause on slide 5 for the 200+ count-up (~1.2 sec)
 - Upload to **YouTube Unlisted**. Title: `Custos Nox — F2 Pitch (Solana Frontier 2026)`
 - Verify URL works in incognito before pasting in Arena field A10
 - **Update Arena A10** with the new URL (any prior deck-v1 URL is obsolete)
