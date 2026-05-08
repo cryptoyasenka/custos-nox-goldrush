@@ -1,7 +1,7 @@
 # CURRENT — custos (Custos Nox)
 
-**Last touched:** 2026-05-08
-**Status:** F2 deck v2 fully polished — все 5 judge-eye улучшений ВНЕДРЕНЫ (s1 product reveal + s4 daemon type + Discord mockup proof-card + Public Goods badge + founder footer + s6-url period fix). 8 анимированных слайдов записаны отдельно в `video-build/f2/slides-individual/slide-{1..8}.webm` для CapCut sequencing. **+ 2026-05-08 чистка:** старый F2 pipeline (pre-deck-v2, May 5) перенесён в `*/archive/` — см. README в каждой архивной папке. Deadline May 10 23:59 PDT
+**Last touched:** 2026-05-08 evening
+**Status:** F2 + F3 VOICE-OVER ГОТОВЫ. F2 = 8 mp3 (`video-build/f2/voice/slide-{1..8}.mp3`, total 1:56 без Veo3-intro). F3 = 17 mp3 (`video-build/f3/voice/01..12*.mp3` + `03b-architecture.mp3` для CapCut overlay 0:45–0:55, total 4:45 raw — Yana режет паузы в CapCut под 3:00). Скрипты `gen.sh` запушены в коммите 9aac593. Yana собирает в CapCut. Deadline May 10 23:59 PDT
 
 ## Open files (ALIVE pipeline — после чистки 2026-05-08)
 - `.planning/SESSION-2026-05-08-COMPLETE.md` — full session log (3 commits, 5+1 fixes, decisions, what's next) — READ FIRST on resume
@@ -26,13 +26,12 @@
 
 ## Next step
 Yana runs (in this order):
-1. `cd C:/Projects/custos/video-build/f2 && npm install && node record-slides.mjs` → `slides.webm`
-2. Generate AI voice MP3 from PITCH-SCRIPT-F2.md narration (ElevenLabs / edge-tts)
-3. Record `architecture.html` in browser (10 sec) → `architecture-overlay.mp4`
-4. Record main F3 demo from TECH-DEMO-SCRIPT-F3.md
-5. CapCut: assemble Veo3 + slides.webm + voice + music (F2); main demo + architecture overlay at 0:45 (F3)
-6. Upload F2 → YouTube Unlisted → Arena A10 + Superteam Earn
-7. Upload F3 → Loom (primary) + YouTube Unlisted → Arena A11 + Superteam Earn
+1. **F2 в CapCut:** Veo3 intro (6-8s) → 8 webm slides (`slides-individual/slide-{1..8}.webm`) → align с 8 mp3 voice (`video-build/f2/voice/slide-{1..8}.mp3`) → music → export
+2. **F3 — записать main demo:** настроить .env (добавить Slack webhook вариант B), 2 терминала + браузер + Discord, читать TECH-DEMO-SCRIPT-F3.md (или живая запись если Yana говорит сама)
+3. **F3 architecture overlay:** Loom/OBS 10-сек silent screencast `assets/pitch-slides/architecture.html` (full-screen) → mp4
+4. **F3 в CapCut:** main demo → накладка architecture overlay на 0:45–0:55 + mp3 `03b-architecture.mp3` поверх + fade in/out 0.3s. Если Yana использует AI voice вместо живой — все 16 main mp3 синхронизирует с экраном
+5. Upload F2 → YouTube Unlisted → Arena A10 + Superteam Earn
+6. Upload F3 → Loom (primary) + YouTube Unlisted → Arena A11 + Superteam Earn
 
 ## Constraints / decisions
 - Active tracks: Ukrainian Sidetrack + online Demo Day (2026-04-23)
