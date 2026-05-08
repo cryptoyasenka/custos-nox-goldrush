@@ -1,17 +1,13 @@
 # CURRENT — custos (Custos Nox)
 
-**Last touched:** 2026-05-09 ~00:22 — Railway daemon LIVE
-**Status:** F2/F3 content-ready. Railway daemon deployed and serving — `https://custos-nox.up.railway.app/health` → `{ok:true, watching:8, ...}`. Live mainnet alerts стримятся через HTTP sink. Deadline 2026-05-10 23:59 PDT.
+**Last touched:** 2026-05-09 ~00:35 — Railway daemon LIVE, 12 DAOs
+**Status:** F2/F3 content-ready. Railway daemon deployed and serving — `https://custos-nox.up.railway.app/health` → `{ok:true, watching:12, ...}`. Live mainnet alerts стримятся через HTTP sink. F3 recording options written to `planning/F3-RECORDING-OPTIONS.md`. Deadline 2026-05-10 23:59 PDT.
 
-## Railway deployed (2026-05-09 00:22)
+## Railway deployed (2026-05-09 00:22 → 00:35)
 
-After 7 failed deploys overnight (server-side rootDirectory cache bug), build finally went through. Daemon up, Helius mainnet RPC working, monitoring 8 Tier-1 PDAs (Mango, Marinade, Pyth, Solend + 4 SPL Governance forks). HTTP sink на :8080: `/health` + `/events?since=<ts>`.
+After 7 failed deploys overnight, build finally went through when Yana clicked manual deploy. Root cause: server-side cache had stale `rootDirectory='dashboard'` despite UI showing `.`. Successful build log: `[DBUG] root directory set as ''`. Likely correlated with Railway's public SSL incident (status.railway.com/incident/1QD5978Z, May 8 20:09 UTC) — broader infra config-propagation instability that night. Workaround Dockerfile (`COPY . .`) and `railway.json` (pinned DOCKERFILE builder) stay in place as defense-in-depth. Daemon now monitors all 12 PDAs (Tier 1 + Tier 2 from MAINNET-WATCHLIST.md) — extended via `railway variables --set CUSTOS_WATCH=...` at 00:34, redeploy confirmed `watching:12` at 00:35.
 
-**For F3 recording — два варианта:**
-- **A. Use Railway** (recommended): set `NEXT_PUBLIC_CUSTOS_DAEMON_URL=https://custos-nox.up.railway.app` when starting `cd dashboard && npm run dev`. Live mainnet feed на дашборде, Yana ноутбук ничего не должен — daemon хостится на Railway.
-- **B. Fully local** (fallback if Railway down): `npm run dev` (daemon) + `cd dashboard && npm run dev` (Next). Localhost:8080 + localhost:3000 как было.
-
-**Optional improvement (not blocking):** Расширить `CUSTOS_WATCH` env на Railway с 8 до 12 PDAs (добавить Tier-2 из MAINNET-WATCHLIST.md), чтобы все 12 карточек на дашборде имели реальные сигналы. Сейчас 4 нижних всегда «green/quiet» т.к. daemon их не мониторит.
+**For F3 recording:** см. `planning/F3-RECORDING-OPTIONS.md` — два варианта (Railway daemon vs fully local), Yana выберет утром.
 
 ## ⚠️ READ FIRST on resume — DO NOT roll back
 
