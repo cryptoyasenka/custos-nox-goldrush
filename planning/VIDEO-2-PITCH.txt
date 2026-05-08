@@ -1,18 +1,26 @@
 ╔══════════════════════════════════════════════════════════════╗
-║          CUSTOS NOX — VIDEO 2: PITCH (≤2 min)               ║
-║          REVISED 2026-05-08 v3 — Playwright + AI-voice       ║
+║          CUSTOS NOX — VIDEO 2: PITCH (~2:18)                ║
+║          REVISED 2026-05-08 v3 — 9 slides + per-slide mp3s  ║
 ║          Полный гайд + текст для озвучки (English narration) ║
 ╚══════════════════════════════════════════════════════════════╝
 
-ВАЖНО — что изменилось в этой версии:
-HTML деку нельзя загрузить в CapCut напрямую. Поэтому:
-  1) Записываем slides.webm headless через Playwright
-     (silent видео ~109 сек с 8 слайдами)
-  2) Озвучку генерим AI-голосом отдельно (ElevenLabs / edge-tts)
-  3) В CapCut собираем: Veo3 intro + slides.webm + voice MP3
-     + опциональная музыка/SFX. CapCut НЕ открывает HTML.
+ЧТО ИЗМЕНИЛОСЬ В v3 (vs предыдущая версия гайда):
+  • Деку перевели на 9 слайдов (добавлен team slide про Yana
+    и OpenGradient TEE модели). Был 8.
+  • Слайд 1 теперь стартует с одного предложения о продукте
+    "Custos Nox is a real-time security monitor..." (5s),
+    дальше Drift hook. Было: только Drift.
+  • Слайд 6 (Setup) закрывается monetization line про
+    Public-Goods Award + Solana Foundation grant + Superteam UA.
+  • Voice генерится скриптом gen.sh — ОДНА команда, на выходе
+    9 отдельных mp3 файлов (не один большой). CapCut собирает
+    их по таймлайну.
 
-Английский исходник (текст для озвучки): planning/PITCH-SCRIPT-F2.md (v2)
+Источники правды:
+  • Сцены и текст:  planning/PITCH-SCRIPT-F2.md  (v3)
+  • Деку:           assets/pitch-slides/deck-v2.html  (9 слайдов)
+  • Voice script:   video-build/f2/voice/gen.sh  (9 chunks)
+  • Playwright:     video-build/f2/record-slides.mjs  (9 holds)
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -22,194 +30,138 @@ HTML деку нельзя загрузить в CapCut напрямую. Поэ
 УЖЕ ЕСТЬ от 2026-05-08:
   C:\Projects\custos\assets\Blockchain_transactions_flow_red…_202605081236.mp4
 
-Если он подходит по визуалу — используй его, генерить заново
-не нужно. Проверь: тёмное цифровое пространство, синие/белые
-линии транзакций, красная линия пересекает их, текст
-"April 1, 2026" → "$285,000,000" → fade to black.
+Если он подходит по визуалу — используй. Проверь:
+  • Тёмное цифровое пространство, синие/белые линии транзакций
+  • Красная линия пересекает их
+  • Текст "April 1, 2026" → "$285,000,000" → fade to black
 
 ЕСЛИ НУЖНО ПЕРЕГЕНЕРИТЬ — Veo3 промпт:
-
   "Dark digital space. Blockchain transactions flow as glowing
   lines — white and blue. Slow, calm. Suddenly one red
   transaction cuts through the others. Text appears:
   'April 1, 2026'. Red line reaches endpoint — everything
   stops. Text: '$285,000,000'. Slow fade to black."
 
-Сохрани клип на рабочий стол или в C:\Projects\custos\assets\.
-
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 2 — ЗАПИСЬ HTML ДЕКИ ЧЕРЕЗ PLAYWRIGHT (silent slides.webm)
+ШАГ 2 — SILENT SLIDES (Playwright запись деки)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Это автоматическая запись — не нужен OBS/Loom/CapCut.
-Скрипт сам открывает headless Chromium 1920×1080,
-прокликивает 8 слайдов с правильным таймингом и сохраняет
-`slides.webm` в video-build/f2/.
+Скрипт открывает headless Chromium 1920×1080, проходит
+все 9 слайдов с правильным таймингом и сохраняет slides.webm.
 
-КОМАНДЫ (Git Bash или PowerShell, из корня проекта):
-
+КОМАНДЫ (Git Bash из корня проекта):
   cd C:/Projects/custos/video-build/f2
   npm install                 # один раз (Playwright Chromium ~150 МБ)
   node record-slides.mjs
 
-ОЖИДАНИЕ: ~2 минуты (109 сек запись + старт/закрытие браузера).
+ОЖИДАНИЕ: ~2:15 (132 сек запись + старт/закрытие браузера).
 
 РЕЗУЛЬТАТ: video-build/f2/slides.webm
-  - 1920×1080, ~109 сек, БЕЗ звука
-  - 8 слайдов с тайминговыми блоками:
-      s1 16s | s2 16s | s3 14s | s4 13s
-      s5 14s | s6 14s | s7 12s | s8 10s
+  • 1920×1080, ~132 сек, БЕЗ звука
+  • 9 слайдов, тайминг (мс):
+      s1=21000  s2=16000  s3=14000  s4=13000  s5=14000
+      s6=16000  s7=10000  s8team=18000  s9=10000
+  • Итого silent: 132 сек = 2:12
 
-ПРОВЕРКА: открой slides.webm в плеере (VLC / MPC / Windows Media).
-Все count-up анимации должны проиграться, переходы между
-слайдами должны быть видны (нажатия ArrowRight скрипт делает сам).
-
-ЕСЛИ slides.webm битый/пустой:
-  - Проверь что deck-v2.html открывается в обычном Chrome
-    (file:// путь): C:\Projects\custos\assets\pitch-slides\deck-v2.html
-  - Перезапусти `npm install` в video-build/f2/
-  - Запусти `node record-slides.mjs` повторно
+ПРОВЕРКА: открой slides.webm в плеере. Должно быть видно:
+  • Slide 1: count-up до $285M
+  • Slide 3: count-up до 10000+
+  • Slide 5: count-up до 200+
+  • Slide 8team: NEW — "YANA" + 3 OpenGradient TEE модели
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 3 — СГЕНЕРИРУЙ AI-ОЗВУЧКУ (1 файл MP3 ~1:55)
+ШАГ 3 — VOICE (9 mp3 через edge-tts, бесплатно)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Берёшь весь английский текст ниже (8 блоков) и генеришь ОДИН
-непрерывный MP3-файл. Между блоками AI сделает естественные
-паузы — это ок, не дроби на 8 файлов.
+Скрипт уже написан. Одна команда → 9 отдельных mp3
+(slide-1.mp3 … slide-9.mp3) с английской озвучкой
+голосом en-US-AriaNeural.
 
-ВЫБОР ИНСТРУМЕНТА:
+КОМАНДЫ (Git Bash):
+  pip install edge-tts        # один раз
+  cd C:/Projects/custos/video-build/f2/voice
+  bash gen.sh
 
-  ВАРИАНТ A — ElevenLabs (платный, лучшее качество):
-    elevenlabs.io → Speech Synthesis
-    голос: "Adam" / "Antoni" / "Daniel" (мужской, спокойный)
-    или "Rachel" / "Bella" (женский, для DAO-ауры)
-    settings: stability 0.45, similarity 0.75
-    → скачай MP3
+ОЖИДАНИЕ: ~30 сек (9 запросов к Microsoft Edge TTS API).
 
-  ВАРИАНТ B — Cartesia.ai (быстрый, хороший):
-    cartesia.ai → Sonic API
-    выбор голоса: "British Reading Lady" / "Cooper"
-    → скачай MP3
+РЕЗУЛЬТАТ: 9 файлов в video-build/f2/voice/
+  slide-1.mp3 ~21 сек   (intro line + multisig 101 + Drift hook)
+  slide-2.mp3 ~16 сек   (Chainalysis chain)
+  slide-3.mp3 ~14 сек   (gap)
+  slide-4.mp3 ~13 сек   (solution)
+  slide-5.mp3 ~14 сек   (proof + stakes)
+  slide-6.mp3 ~16 сек   (setup + monetization)
+  slide-7.mp3 ~10 сек   (vision)
+  slide-8.mp3 ~18 сек   (TEAM SLIDE — NEW)
+  slide-9.mp3 ~10 сек   (close)
 
-  ВАРИАНТ C — edge-tts (БЕСПЛАТНЫЙ, командная строка):
-    Установка: pip install edge-tts
-    Команда:
-      edge-tts --voice "en-US-AndrewNeural" --rate "-5%" \
-        --file pitch-narration.txt --write-media voice.mp3
-    Голоса для теста:
-      en-US-AndrewNeural (мужской, спокойный)
-      en-US-AvaNeural (женский, тёплый)
-      en-GB-RyanNeural (британский, нейтральный)
-      en-US-EmmaNeural (женский, доверительный)
+Итого озвучки: ~132 сек.
 
-ТЕКСТ ДЛЯ ОЗВУЧКИ (скопируй ВСЁ в pitch-narration.txt):
+ЕСЛИ ХОЧЕШЬ ДРУГОЙ ГОЛОС:
+  Открой gen.sh, поменяй VOICE="en-US-AriaNeural" на:
+    en-US-AndrewNeural   — мужской, спокойный
+    en-US-AvaNeural      — женский, тёплый
+    en-GB-RyanNeural     — британский, нейтральный
+    en-US-EmmaNeural     — женский, доверительный
+  И запусти `bash gen.sh` повторно.
 
-══════════════════════════════════════════════════════════════
-[SLIDE 1 ~16s]
-DAOs on Solana hold their treasuries through multisig
-wallets — three-of-five signatures, like a corporate
-bank account. Last April, one of them lost $285 million
-in twelve minutes. Nine days of on-chain preparation.
-Zero alerts fired.
-
-[SLIDE 2 ~16s]
-Chainalysis traced the attack. Every config change was
-visible on-chain for nine days — the approval threshold
-was lowered, safety delays removed, a drain transaction
-pre-armed. The DAO had no tool watching. Nothing flagged it.
-
-[SLIDE 3 ~14s]
-Solana Foundation's STRIDE program monitors fifty
-protocols above ten million in TVL. The other ten
-thousand have nothing.
-
-[SLIDE 4 ~13s]
-Custos Nox. Open-source TypeScript daemon. One detector
-per step in the Drift chain — plus one for adjacent
-attacks. Any single alert would have bought hours of
-response time.
-
-[SLIDE 5 ~14s]
-It's built. Over two hundred tests, sub-second alert
-latency, MIT licensed. If Drift had this on March 23rd,
-the first CRITICAL alert would have fired nine days
-before the drain.
-
-[SLIDE 6 ~14s]
-Five minutes to set up. Copy your Squads PDA, set one
-env variable, run npm. No paid tiers ever — this is
-a public good. Squads Discord, Superteam network,
-GitHub organic — the users are visible on-chain right now.
-
-[SLIDE 7 ~12s]
-v1 lives today, self-hosted, free forever. v2: hosted
-alert feed. v3: pre-configured mainnet watchlist for
-the whole ecosystem.
-
-[SLIDE 8 ~10s]
-github.com/cryptoyasenka/custos-nox. STRIDE covers fifty.
-Ten thousand DAOs have nothing. Custos Nox is for them.
-══════════════════════════════════════════════════════════════
-
-ВАЖНО: убери "[SLIDE N ~Ns]" маркеры из файла перед TTS,
-иначе AI озвучит их как текст. Маркеры нужны только тебе
-для синхронизации в CapCut.
-
-ПРОВЕРКА: длина MP3 ≈ 1:50–1:55. Если 2:10+ — скорость
-повысь (rate +10% в edge-tts). Если 1:30 — слишком быстро,
-понизь rate до -10%.
+ЕСЛИ ХОЧЕШЬ ELEVENLABS КАЧЕСТВО:
+  Открой PITCH-SCRIPT-F2.md, скопируй текст 9 блоков по
+  очереди в elevenlabs.io → Speech Synthesis → "Adam" /
+  "Rachel" → скачай 9 mp3 → положи в video-build/f2/voice/
+  под теми же именами slide-1.mp3 … slide-9.mp3.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 4 — МОНТАЖ В CAPCUT (multi-track сборка)
+ШАГ 4 — МОНТАЖ В CAPCUT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Новый проект → формат 16:9, 1080p
 
 2. TRACK 1 (video):
-   - Импортируй Veo3 клип (6–8 сек) в начало
-   - После него — slides.webm (~109 сек)
-   - Между ними transition Fade (0.3–0.5 сек)
-   - ИТОГО видео-дорожка: ~115–117 сек
+   • Импортируй Veo3 клип (~7 сек) в начало
+   • После него — slides.webm (132 сек)
+   • Между ними transition Fade (0.3–0.5 сек)
+   • ИТОГО видео-дорожка: ~139 сек ≈ 2:19
 
 3. TRACK 2 (voice):
-   - Импортируй voice.mp3 (AI-озвучка, ~1:50)
-   - Размести так, чтобы voice стартовал ПОСЛЕ Veo3 клипа
-     (примерно с 0:07 timeline)
-   - Синхронизируй так, чтобы каждый блок voice совпал со
-     своим слайдом. Используй маркеры из текста выше:
-       slide 1 voice: 0:07–0:23
-       slide 2 voice: 0:23–0:39
-       slide 3 voice: 0:39–0:53
-       slide 4 voice: 0:53–1:06
-       slide 5 voice: 1:06–1:20
-       slide 6 voice: 1:20–1:34
-       slide 7 voice: 1:34–1:46
-       slide 8 voice: 1:46–1:56
-   - Если voice короче video — НЕ страшно, последний слайд
-     задержится на 1–2 сек после фразы "Custos Nox is for them."
+   • Импортируй ВСЕ 9 mp3 в проект
+   • Размести по таймлайну, каждый стартует на своём слайде:
+
+     slide-1.mp3  → 0:07 (после Veo3 fade)
+     slide-2.mp3  → 0:28
+     slide-3.mp3  → 0:44
+     slide-4.mp3  → 0:58
+     slide-5.mp3  → 1:11
+     slide-6.mp3  → 1:25
+     slide-7.mp3  → 1:41
+     slide-8.mp3  → 1:51   ← TEAM SLIDE
+     slide-9.mp3  → 2:09
+     end          → 2:19
+
+   • Если voice одного слайда чуть длиннее/короче чем silent
+     блок — НЕ страшно: можно подсдвинуть следующий, или
+     обрезать тишину в конце mp3
 
 4. TRACK 3 (music, ОПЦИОНАЛЬНО):
-   - Тихая ambient/electronic дорожка под voice
-   - Громкость: -18 dB (сильно тише voice)
-   - Fade in 1 сек в начале, fade out 2 сек в конце
-   - Источники: epidemicsound.com (платно), pixabay.com/music
-     (бесплатно), uppbeat.io (бесплатно с регистрацией)
+   • Тихая ambient/electronic дорожка под voice
+   • Громкость: -18 dB (сильно тише voice)
+   • Fade in 1 сек, fade out 2 сек
+   • Источники: pixabay.com/music (бесплатно), uppbeat.io
 
 5. TRACK 4 (SFX, ОПЦИОНАЛЬНО):
-   - Тихий "click" / "tick" на момент count-up завершения
-     (на $285M, 10000+, 200+)
-   - Subtle "swoosh" на переходах между слайдами
-   - Громкость: -24 dB
+   • "Click" / "tick" на момент завершения count-up'ов
+     (на $285M @ ~0:25, 10000+ @ ~0:46, 200+ @ ~1:13)
+   • Subtle "swoosh" на переходах между слайдами
+   • Громкость: -24 dB
 
 6. Проверь общую длину:
-   ИТОГО: Veo3 (7s) + slides (109s) = 116 сек ≈ 1:56
-   с буфером: ≤2:00
+   ИТОГО: Veo3 (7s) + slides (132s) = 139 сек ≈ 2:19
+   Бюджет Superteam UA Frontier — "пару хвилин", в норме
 
-7. Export → MP4, 1080p, H.264, ~10–15 МБ
+7. Export → MP4, 1080p, H.264, ~15–20 МБ
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -221,7 +173,7 @@ Ten thousand DAOs have nothing. Custos Nox is for them.
 3. Заголовок: Custos Nox — F2 Pitch (Solana Frontier 2026)
 4. Описание (вставь как есть):
 
-   Open-source attack detection for Solana multisigs and DAOs.
+   Open-source security monitor for Solana DAO multisigs.
    Live: https://custos-nox.up.railway.app
    GitHub: https://github.com/cryptoyasenka/custos-nox
 
@@ -239,8 +191,8 @@ ARENA A10 (PITCH VIDEO):
   arena.colosseum.org → твой проект → Edit submission
   → Step 2 → PITCH VIDEO (поле A10) → вставь YouTube URL → Save
 
-  ВНИМАНИЕ: старый URL https://youtu.be/eX_Ze5lDLrc был для
-  deck-v1 — обнови на новый.
+  ВНИМАНИЕ: любой предыдущий URL deck-v1/v2 уже obsolete,
+  обновляй на новый.
 
 SUPERTEAM EARN (Ukrainian track, F2):
   https://superteam.fun/earn/listing/frontier-hackathon-ukrainian-track
@@ -252,19 +204,17 @@ SUPERTEAM EARN (Ukrainian track, F2):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Veo3 intro             0:00–0:07   ~7 сек
-Slide 1 ($285M)        0:07–0:23   ~16 сек
-Slide 2 (Chainalysis)  0:23–0:39   ~16 сек
-Slide 3 (gap 10000+)   0:39–0:53   ~14 сек
-Slide 4 (solution)     0:53–1:06   ~13 сек
-Slide 5 (proof 200+)   1:06–1:20   ~14 сек
-Slide 6 (setup+GTM)    1:20–1:34   ~14 сек
-Slide 7 (vision)       1:34–1:46   ~12 сек
-Slide 8 (close)        1:46–1:56   ~10 сек
+Slide 1 (intro+$285M)  0:07–0:28   ~21 сек
+Slide 2 (Chainalysis)  0:28–0:44   ~16 сек
+Slide 3 (gap 10000+)   0:44–0:58   ~14 сек
+Slide 4 (solution)     0:58–1:11   ~13 сек
+Slide 5 (proof 200+)   1:11–1:25   ~14 сек
+Slide 6 (setup+mono)   1:25–1:41   ~16 сек
+Slide 7 (vision)       1:41–1:51   ~10 сек
+Slide 8 (TEAM new)     1:51–2:09   ~18 сек
+Slide 9 (close)        2:09–2:19   ~10 сек
 ─────────────────────────────────────────────
-Итого                  ~1:55–1:58
-
-Если выходишь за 2:00 — сократи slide 7 narration до:
-"v1 lives today. v2 hosted feed. v3 mainnet watchlist."
+Итого                  ~2:19
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -274,34 +224,41 @@ Slide 8 (close)        1:46–1:56   ~10 сек
 Playwright не запускается → проверь Node 18+ (`node -v`),
 переустанови deps: `rm -rf node_modules && npm install`
 
-slides.webm пустой / 0 байт → deck-v2.html не открылся.
-Проверь: открой `assets/pitch-slides/deck-v2.html` в Chrome
-напрямую — должны видеть слайды и анимацию count-up.
+slides.webm слишком короткий (<120 сек) → скрипт не дождался
+анимаций. Открой record-slides.mjs, увеличь нужный элемент
+SLIDE_DURATIONS_MS на 2-3 секунды.
 
-slides.webm слишком короткий (<90 сек) → скрипт не дождался
-анимаций. Увеличь SLIDE_DURATIONS_MS в record-slides.mjs.
+edge-tts ругается на ConnectionError → запусти повторно
+(`bash gen.sh`), это transient. Скрипт перетрёт mp3 заново.
 
-AI-голос звучит роботично → попробуй другой голос
-(en-US-AvaNeural / Brian / Emma). Или ElevenLabs для качества.
+Voice mp3 одного слайда длиннее silent блока → не критично:
+в CapCut двигай следующий voice mp3 чуть позже + растяни
+тот silent slide на пару секунд (правый край видео-клипа).
 
-Voice не синхронизирован со слайдами → в CapCut двигай voice
-по таймлайну, можно резать паузы между блоками narration.
+AI-голос звучит роботично → смени VOICE в gen.sh на
+en-US-AndrewNeural / en-US-EmmaNeural / en-GB-RyanNeural,
+или подставь mp3 из ElevenLabs под теми же именами.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 КЛЮЧЕВЫЕ ФРАЗЫ (для проверки что AI-голос их выделит)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. "Nine days of on-chain preparation. Zero alerts fired."
-2. "Chainalysis confirmed the timeline."
-3. "The other ten thousand have nothing."
-4. "Any single alert would have bought hours of response time."
-5. "If Drift had this on March 23rd, the first CRITICAL alert
+1. "Custos Nox is a real-time security monitor for Solana DAO
+    multisigs — open-source, sub-second alerts, MIT licensed."
+2. "Nine days of on-chain preparation. Zero alerts fired."
+3. "Chainalysis traced the attack."
+4. "The other ten thousand have nothing."
+5. "Any single alert would have bought hours of response time."
+6. "If Drift had this on March 23rd, the first CRITICAL alert
     would have fired nine days before the drain."
-6. "No paid tiers ever — this is a public good."
-7. "STRIDE covers fifty. Ten thousand DAOs have nothing.
+7. "No paid tiers ever — Public Goods Award sustainability,
+    covered by Solana Foundation grant and Superteam Ukraine."
+8. "Three open-source security models on the OpenGradient
+    TEE hub."   ← TEAM SLIDE
+9. "STRIDE covers fifty. Ten thousand DAOs have nothing.
     Custos Nox is for them."
 
 Если AI-голос проглатывает паузы между этими фразами —
-вставь в текст между блоками <break time="800ms"/> (SSML)
-или просто добавь два enter'а.
+вставь в gen.sh между предложениями два пробела или `... .`,
+edge-tts держит паузу на точках лучше чем на запятых.

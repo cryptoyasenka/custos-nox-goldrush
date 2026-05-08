@@ -1,579 +1,369 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║       CUSTOS NOX — VIDEO 3: TECH DEMO (~3 min)              ║
-║       Полный гайд + текст для озвучки (v4 context-first)     ║
+║       REVISED 2026-05-08 v5 — DASHBOARD-FIRST               ║
+║       Terminal-zero. Девнет атака — реплей в alert feed.    ║
 ╚══════════════════════════════════════════════════════════════╝
 
-ВАЖНО — что изменилось в этой версии:
-Первые 30 секунд теперь объясняют ЧТО ТАКОЕ DAO, multisig и Squads
-ДО упоминания Drift. Это для не-крипто судьи. Дальше — всё как раньше:
-4 детектора Drift-цепочки + 5-й adjacent + Discord + setup + close.
+ЧТО ИЗМЕНИЛОСЬ В v5 (vs предыдущая v4):
+  • Убран terminal layout полностью. Никаких двух терминалов
+    в кадре, никакого live `npm run smoke:*` на экране.
+  • Drift-цепочка теперь демонстрируется как 4 alert-карточки
+    в дашборде (alert feed), pre-recorded на девнете.
+  • Главный экран — `#live` секция с 12 mainnet DAO (Mango,
+    Marinade, Pyth, Solend, Jupiter, Raydium, Orca, BonkDAO
+    + 4 tier-2). Зелёные точки статусов + клики → Realms.
+  • Новая структура: 7 секций вместо 12. Меньше переключений
+    окон, плавнее flow.
+  • 9 voice mp3 файлов вместо 17 — сгенерены, готовы.
 
-Английский исходник: planning/TECH-DEMO-SCRIPT-F3.md (v4)
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 1 — ПРОВЕРЬ .ENV (за 10 мин до записи)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Открой C:\Projects\custos\.env
-Убедись что там ТОЧНО такое:
-
-  CUSTOS_CLUSTER=devnet
-  CUSTOS_RPC_URL=https://api.devnet.solana.com
-  CUSTOS_WATCH=SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf:Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao,11111111111111111111111111111111:BYCMzkaGMTsPLLxzoZE8qqLb56ov6V6hnoAacgnu2KBE
-  CUSTOS_DISCORD_WEBHOOK=<твой webhook URL>
-
-АККАУНТЫ ДЛЯ КОМАНД:
-  Multisig PDA:  Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
-  Nonce pubkey:  BYCMzkaGMTsPLLxzoZE8qqLb56ov6V6hnoAacgnu2KBE
+Источники правды:
+  • Сцены и текст:  planning/TECH-DEMO-SCRIPT-F3.md  (v5)
+  • Voice script:   video-build/f3/voice/gen.sh  (9 chunks)
+  • Voice mp3:      video-build/f3/voice/01-hero.mp3 ... 07b-close.mp3
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 2 — ПРОГОНИ ВХОЛОСТУЮ (не записываешь ещё)
+ШАГ 1 — ПОДГОТОВЬ ДЕМОН (выбери один сценарий)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Терминал ЛЕВЫЙ:
-  cd C:\Projects\custos
+СЦЕНАРИЙ A — MAINNET (предпочтительно для пита́ча):
+  1. Закончи Railway деплой (см. RAILWAY-DEPLOY.md):
+     • Helius RPC URL → `railway variable set "CUSTOS_RPC_URL=..."`
+     • `railway up`
+     • Проверка: https://custos-nox.up.railway.app/health
+       должно вернуть {"ok":true,"watching":8,...}
+  2. На Vercel установи env var:
+       NEXT_PUBLIC_CUSTOS_DAEMON_URL=https://custos-nox.up.railway.app
+     → Redeploy.
+  3. Открой https://custos-nox.vercel.app → секция #live
+     → должна показывать "Live mainnet · N events" (зелёная точка)
+
+СЦЕНАРИЙ B — ЛОКАЛЬНЫЙ DEVNET (если Railway не закончен):
+  1. В .env положи:
+       CUSTOS_CLUSTER=devnet
+       CUSTOS_RPC_URL=https://api.devnet.solana.com
+       CUSTOS_HTTP_PORT=8080
+       CUSTOS_WATCH=SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf:Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao,11111111111111111111111111111111:BYCMzkaGMTsPLLxzoZE8qqLb56ov6V6hnoAacgnu2KBE
+       CUSTOS_DISCORD_WEBHOOK=<твой webhook>
+  2. `npm run dev` локально → daemon слушает 8080
+  3. На дашборде укажи NEXT_PUBLIC_CUSTOS_DAEMON_URL=http://localhost:8080
+     → секция #live покажет "Devnet sample · N events"
+
+В обоих сценариях narration v5 работает — где она говорит
+"twelve Solana DAOs on mainnet" она ссылается на UI который
+показывает все 12 в watchlist (`Watching 12 Solana DAOs in
+real time`), независимо от того mainnet это или devnet.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 2 — PRE-RECORD: ДЕВНЕТ ATTACK CHAIN ДЛЯ alert feed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+В кадре зрители увидят 4 alert-карточки в alert feed
+(секция [1:40-2:25]). Их нужно прогнать на девнете
+ЗАРАНЕЕ, до съёмки, чтобы они уже сидели в дашборде.
+
+ВАЖНО: если основной демон на mainnet — НЕ запускай smoke
+против него. Открой ВТОРОЙ локальный demon на devnet, и
+для съёмки секции replay переключи дашборд на этот второй
+demon (через NEXT_PUBLIC_CUSTOS_DAEMON_URL=http://localhost:8080
++ браузер refresh). Так mainnet event log не загрязнится.
+
+КОМАНДЫ (Git Bash, отдельный devnet daemon):
+  cd C:/Projects/custos
+  # терминал 1 — daemon devnet
   npm run dev
-  → жди: "subscribed to 2 accounts" (или похожее)
 
-Терминал ПРАВЫЙ — прогони все 4 команды по очереди:
-  npm run smoke:timelock -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
-  npm run smoke:weaken   -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
+  # терминал 2 — атака
+  npm run smoke:create
+  # → возьми новый PDA, обнови CUSTOS_WATCH в .env, рестартни daemon
+  npm run smoke:timelock -- <NEW-PDA>
+  npm run smoke:weaken   -- <NEW-PDA>
   npm run smoke:nonce-init
-  npm run smoke:rotate-signers -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
+  # 4-й алерт (stale-nonce-execution) — генерится через тесты:
+  npm test src/detectors/stale-nonce-execution
 
-Если все 4 алерта пришли в левый терминал И в Discord — всё работает.
+ПРОВЕРКА: открой дашборд → #live → alert feed должен
+содержать 4 строки в порядке (новые сверху):
+  1. Stale nonce execution    CRITICAL
+  2. Privileged nonce         CRITICAL
+  3. Multisig weakening       HIGH
+  4. Timelock removal         CRITICAL
 
-ПЕРЕД запиcью:
-  npm run smoke:create     # свежий мультисиг
-  → возьми новый PDA, обнови CUSTOS_WATCH в .env, рестартни daemon
-  → так первый детектор сработает на чистый аккаунт без шума
+Если порядок другой или строк меньше — погоняй smoke
+заново. Каждая команда добавляет одну карточку в feed.
 
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 3 — ПОДГОТОВЬ РАСКЛАДКУ ЭКРАНА
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-ВКЛАДКА БРАУЗЕРА (наверху экрана, сразу видна hero-секция):
-  https://custos-nox.up.railway.app
-  → шрифт крупный, тёмный фон
-  → проверь что hero-блок и Drift Timeline видны без скролла
-
-ДВА ТЕРМИНАЛА (рядом, левый + правый), оба в C:\Projects\custos
-  → шрифт максимальный (Ctrl + колёсо мыши)
-  → ЛЕВЫЙ: уже запущен npm run dev, видны 2 строки subscription
-  → ПРАВЫЙ: пустой prompt, готов вводить команды
-
-DISCORD (отдельная вкладка/окно, развёрнутая на полный экран):
-  → канал #custos-alerts
-  → прокручен в самый низ
-
-ПЕРЕКЛЮЧЕНИЕ: браузер → два терминала → Discord
-Уведомления отключи. Все лишние окна закрой.
-Запусти OBS / Loom Desktop / Win+G. Проверь звук.
+ЕСЛИ ХОЧЕШЬ ОБОЙТИСЬ БЕЗ DEVNET — fallback:
+  Дашборд автоматически показывает SAMPLE_ALERTS когда
+  daemon недоступен. Это 4 карточки точно того же формата.
+  Narration v5 работает с ними один-в-один (она говорит
+  "devnet replay" — это и есть seeded sample data).
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 3.5 — ЗАПИШИ ARCHITECTURE OVERLAY ОТДЕЛЬНО (10 сек)
+ШАГ 3 — ПОДГОТОВЬ DISCORD ВКЛАДКУ
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Это отдельный 10-секундный клип, который ты потом
-наложишь поверх main demo в CapCut на отметке 0:45–0:55.
-Зачем: daemon не визуальный — одна архитектурная диаграмма
-(WebSocket → 5 детекторов → fan-out) усиливает понимание
-у судьи без крипто-бэкграунда.
+  • Открой Discord, канал #custos-alerts
+  • В нём должны быть 4 свежих embed'а из ШАГ 2 — те же
+    4 алерта что в дашборде (timelock + weakening + nonce
+    + stale-nonce). Если меньше 4 — webhook не настроен,
+    смотри RAILWAY-DEPLOY.md или .env CUSTOS_DISCORD_WEBHOOK
+  • Прокрути вниз так чтобы все 4 embed'а были видны
+  • Полный экран. Уведомления выключи
 
-ВАРИАНТ A — записать СЕЙЧАС, до main demo (рекомендуется):
-  1. Открой в Chrome/Edge:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ШАГ 4 — ARCHITECTURE OVERLAY (10 сек, отдельный клип)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Это отдельный 10-сек клип, который наложишь поверх main
+demo в CapCut на отметке 1:30–1:40.
+
+ЗАПИСАТЬ ОТДЕЛЬНО (ДО main demo):
+  1. Открой в Chrome:
      C:\Projects\custos\assets\pitch-slides\architecture.html
   2. F11 — полный экран. Проверь что диаграмма помещается
-     целиком, шрифты крупные, все 5 детекторных pill'ов видны.
-  3. Запусти Loom Desktop / OBS / Win+G на запись экрана.
-  4. Прочитай ОЗВУЧКУ ниже. Хронометраж ~10 сек.
-  5. Останови запись. Сохрани файл как
-     `architecture-overlay.mp4` или `.webm` в удобной папке.
+     целиком, шрифты крупные, все 5 детекторных pill'ов видны
+  3. Запусти OBS / Loom Desktop / Win+G — mute mic
+     (голос подложим из mp3)
+  4. Запиши 10 секунд тишины
+  5. Сохрани как `architecture-overlay.mp4`
 
-ОЗВУЧКА (English, читай ровно, спокойно — это пояснение, не пик):
-
-  "WebSocket subscription to Solana RPC. Five detectors
-  run in parallel on every event. When one fires, fan-out
-  to Discord, Slack, and console — none of them block
-  the others. Sub-second alert latency end to end."
-
-ВАРИАНТ B — озвучить AI-голосом (если делаешь через TTS):
-  1. Запиши тихий screencast architecture.html на 10 сек
-     БЕЗ голоса (Loom/OBS, mute mic)
-  2. Сгенери AI-озвучку этого английского куска (ElevenLabs
-     / Cartesia / edge-tts) → MP3 ~10 сек
-  3. В CapCut наложи MP3 на видео-overlay поверх main demo
-
-ПРОВЕРКА перед записью:
-- Animation в architecture.html НЕ нужна — это статичная
-  диаграмма, единственная "live" часть это голос
-- Если поплыли пропорции — Ctrl + 0 (reset zoom) в браузере
-- Если вокруг диаграммы тёмные поля — это нормально, фон
-  сольётся с main demo
+ОЗВУЧКА: уже сгенерена — `video-build/f3/voice/04-architecture.mp3`
+В CapCut положишь её под overlay-клип (ШАГ 6).
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 4 — ЗАПИСЬ MAIN DEMO (читай этот файл с телефона или второго экрана)
+ШАГ 5 — ЗАПИСЬ MAIN DEMO (читай этот файл с телефона / 2-го экрана)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ОБЩИЕ ПРАВИЛА:
-- Первые 30 секунд — СПОКОЙНЫЙ темп, объясняешь основу. Не торопись в терминал.
-- После каждой smoke-команды — пауза 4 сек, дай алерту прийти и прочитаться.
-- Не вырезай ожидание подтверждения транзакции — это доказывает что цепочка реальная.
-- Discord переключай ОДНИМ движением (он уже развёрнут в другой вкладке).
+- ЗАПИСЫВАЕШЬ БЕЗ ГОЛОСА (mute mic). Голос подложим из mp3
+  файлов в CapCut. Так избежим errors / ums / повторов
+- Открой 2 вкладки браузера: дашборд + Discord
+- Дашборд начинается на hero-секции
+- Один смуууусный take. Если что-то пошло не так — стоп,
+  начни запись с начала. Не страшно
 
-
-──────────────────────────────────────────────────────
-[0:00–0:30] БРАУЗЕР: hero + Drift Timeline
-──────────────────────────────────────────────────────
-
-  ЭКРАН: браузер на полный экран, hero-секция dashboard.
-
-  ГОВОРИ (спокойно, объясняешь):
-
-  "DAOs — decentralized organizations on Solana — manage
-  their funds through multisig wallets. A multisig works
-  like a company bank account that requires multiple
-  signatures: three out of five people must approve before
-  any money moves.
-
-  Squads is the most popular multisig tool on Solana.
-  Many of Solana's largest DAOs, grant committees,
-  and protocol treasuries use it. And right now,
-  most of them have zero monitoring.
-
-  In April 2026, that cost one protocol $285 million."
-
-  → Скролл вниз до Drift Timeline (4 карточки видны).
-
-  ГОВОРИ:
-
-  "The Drift attack wasn't a sudden hack. The attacker
-  spent nine days making config changes — in full public
-  view, on-chain. No tool sent a single alert.
-
-  Custos Nox is that tool."
-
+LAYOUT: только браузер на полный экран. Всё, что нужно
+переключить — это вкладка Discord на отметке [2:25-2:40].
 
 ──────────────────────────────────────────────────────
-[0:30–0:45] БРАУЗЕР: секция "What it catches" (5 детекторов)
+[0:00–0:25] HERO (~25s)
 ──────────────────────────────────────────────────────
-
-  ЭКРАН: скролл вверх к секции с 5 карточками детекторов
-  (метки "Drift step 1/4", "Drift step 2/4" и т.д.).
-
-  ГОВОРИ:
-
-  "Five detectors running today. Four of them map to one
-  step each in the Drift attack chain. The fifth covers
-  an adjacent attack vector that has hit other Solana
-  protocols.
-
-  Timelock removal. Multisig weakening. Privileged nonce.
-  Stale nonce execution.
-
-  Any single one firing would have given the DAO days
-  to respond."
-
+  ЭКРАН: дашборд hero — крупный заголовок, тёмный фон
+  ДЕЙСТВИЕ: ничего, просто стой на hero
+  Voice: 01-hero.mp3 (~24s) — DAO/multisig/Squads/$285M
 
 ──────────────────────────────────────────────────────
-[0:45–0:55] ARCHITECTURE OVERLAY (10 сек, CapCut, fade in/out)
+[0:25–0:50] #live MULTI-DAO GRID (~25s)
 ──────────────────────────────────────────────────────
-
-  ЭКРАН: ничего не делаешь во время записи main demo.
-  Это отдельный 10-сек клип `architecture-overlay.mp4`,
-  который накладываешь в CapCut поверх main video на
-  отметке 0:45–0:55 с fade in 0.3s + fade out 0.3s.
-
-  → См. ШАГ 3.5 ниже — там описано как записать этот overlay
-    отдельно, ДО main demo.
-
-  ОЗВУЧКА (English, идёт ПОВЕРХ overlay-картинки в CapCut):
-
-  "WebSocket subscription to Solana RPC. Five detectors
-  run in parallel on every event. When one fires, fan-out
-  to Discord, Slack, and console — none of them block
-  the others. Sub-second alert latency end to end."
-
+  ДЕЙСТВИЕ: плавно скролл вниз к секции #live
+  ЭКРАН: заголовок "Watching 12 Solana DAOs in real time"
+         + grid из 12 карточек DAO с зелёными точками
+  Пауза 1.5 сек на этом виде, дай зрителю прочитать
+  Voice: 02-live-watchlist.mp3 (~26s) — перечисление 12 DAO
 
 ──────────────────────────────────────────────────────
-[0:55–1:05] ПЕРЕКЛЮЧИСЬ НА ДВА ТЕРМИНАЛА (Alt+Tab)
+[0:50–1:30] DETECTOR CARDS (~40s)
 ──────────────────────────────────────────────────────
-
-  ЭКРАН: левый + правый терминал рядом.
-  В левом видно npm run dev и 2 строки subscription.
-
-  ГОВОРИ:
-
-  "Left terminal — Custos Nox, watching a Squads multisig
-  on devnet. That's the DAO's security monitor.
-
-  Right terminal — me, playing the attacker. Same steps,
-  same order as Drift.
-
-  Watch the left terminal."
-
+  ДЕЙСТВИЕ: скролл вверх к секции "What it catches"
+  ЭКРАН: 5 карточек детекторов с метками "Drift step 1/4" и т.д.
+  Voice: 03-detectors.mp3 (~44s) — 5 детекторов с маппингом
 
 ──────────────────────────────────────────────────────
-[1:05–1:22] ДЕТЕКТОР 1 — TIMELOCK (правый терминал)
+[1:30–1:40] ARCHITECTURE OVERLAY (10s, CapCut)
 ──────────────────────────────────────────────────────
-
-  ГОВОРИ (сначала):
-
-  "The attacker's first move: remove the governance
-  timelock. The timelock is the DAO's reaction window —
-  the time the community has to notice something is wrong
-  and respond."
-
-  КОМАНДА (печатай и Enter):
-    npm run smoke:timelock -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
-
-  → жди 4 сек → в левом терминале появляется CRITICAL алерт
-
-  ГОВОРИ:
-
-  "CRITICAL. Timelock gone. No buffer left for the DAO."
-
+  ДЕЙСТВИЕ: ничего в main demo. Это отдельный overlay-клип
+  в CapCut с fade in/out (см. ШАГ 4)
+  Voice: 04-architecture.mp3 (~12s) — наложится в CapCut
 
 ──────────────────────────────────────────────────────
-[1:22–1:37] ДЕТЕКТОР 2 — WEAKENING (правый терминал)
+[1:40–2:25] DEVNET REPLAY В ALERT FEED (~45s)
 ──────────────────────────────────────────────────────
-
-  ГОВОРИ (сначала):
-
-  "Next: weaken the multisig. Change the rule from
-  'three people must approve' to 'one person must approve'.
-  The treasury is now under single-signer control."
-
-  КОМАНДА:
-    npm run smoke:weaken -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
-
-  → жди 4 сек → HIGH алерт
-
-  ГОВОРИ:
-
-  "HIGH. Three-of-five dropped to one-of-five.
-  The attacker can now approve any transaction alone."
-
+  ДЕЙСТВИЕ: скролл вниз обратно к #live, к alert feed
+  ЭКРАН: 4 alert-карточки видны (Stale nonce, Privileged
+         nonce, Weakening, Timelock — новые сверху)
+  В МОМЕНТЕ ~ 2:00 кликни на ВТОРУЮ карточку (Privileged
+  nonce / Weakening) → alert detail panel разворачивается
+  Подержи 3 сек на развёрнутой панели
+  Voice: 05a-replay-rows.mp3 (~34s) + 05b-replay-detail.mp3 (~11s)
+         = 45s total, две дорожки подряд
 
 ──────────────────────────────────────────────────────
-[1:37–1:52] ДЕТЕКТОР 3 — NONCE (правый терминал)
+[2:25–2:40] DISCORD FAN-OUT (~15s)
 ──────────────────────────────────────────────────────
-
-  ГОВОРИ (сначала):
-
-  "Third: create a durable nonce under an attacker-controlled
-  key. This lets you pre-sign a transaction that stays valid
-  forever — and execute it whenever you want.
-  This is the moment the drain was armed."
-
-  КОМАНДА:
-    npm run smoke:nonce-init
-
-  → жди 4 сек → CRITICAL алерт
-
-  ГОВОРИ:
-
-  "CRITICAL. Pre-signed drain transaction is now live
-  and waiting."
-
+  ДЕЙСТВИЕ: переключись на Discord-вкладку (Alt+Tab или click)
+  ЭКРАН: канал #custos-alerts, 4 embed'а видны
+  Медленно прокрути ~3 сек чтобы все 4 показать
+  Voice: 06-discord.mp3 (~11s)
 
 ──────────────────────────────────────────────────────
-[1:52–2:05] ДЕТЕКТОР 5 — SIGNER ROTATION (правый терминал)
+[2:40–3:00] SETUP + CLOSE (~20s)
 ──────────────────────────────────────────────────────
+  ДЕЙСТВИЕ: вернись на браузер, прокрути в footer "Self-host"
+  ЭКРАН: 3 шага setup + GitHub URL внизу
+  Подержи на GitHub URL последние 2 сек
+  Voice: 07a-setup.mp3 (~15s) + 07b-close.mp3 (~11s) = 26s
+         Если сумма растягивает — обрежь хвост 07b в CapCut
 
-  ГОВОРИ (сначала):
+  СТОП ЗАПИСЬ.
 
-  "And one more — not from the Drift attack specifically,
-  but from similar exploits: the attacker silently swaps
-  out a legitimate co-signer for their own key.
-  The threshold looks the same. The quorum is not."
-
-  КОМАНДА:
-    npm run smoke:rotate-signers -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
-
-  → жди 4 сек → HIGH алерт
-
-  ГОВОРИ:
-
-  "HIGH. Legitimate signer evicted, attacker key added."
-
-
-──────────────────────────────────────────────────────
-[2:05–2:21] DISCORD — 4 EMBEDS на полный экран
-──────────────────────────────────────────────────────
-
-  ЭКРАН: переключись на Discord, развёрнутый в другой вкладке.
-
-  ГОВОРИ:
-
-  "This is what the DAO team would see in Discord.
-
-  Not a log file — a clear alert with severity level,
-  exactly what changed, and a direct link to the
-  transaction on Solscan.
-
-  If Drift had this running on March 23rd, that first
-  CRITICAL alert would have landed nine days before
-  the drain.
-
-  Discord, Slack, and terminal all fire simultaneously.
-  One failing webhook never blocks the others."
-
-  → Медленно прокрути через все 4 embed'а — 4 сек.
-
-
-──────────────────────────────────────────────────────
-[2:21–2:29] ДЕТЕКТОР 4 — STALE NONCE TESTS (правый терминал)
-──────────────────────────────────────────────────────
-
-  ЭКРАН: вернись на правый терминал.
-
-  ГОВОРИ (сначала):
-
-  "The fourth Drift-chain detector catches the drain
-  itself — when the pre-signed transaction executes
-  from a stale nonce. Fourteen unit tests cover the exact
-  Drift pattern, all green."
-
-  КОМАНДА:
-    npm test src/detectors/stale-nonce-execution
-
-  → жди "14 passing"
-
-
-──────────────────────────────────────────────────────
-[2:29–2:45] БРАУЗЕР — секция "Self-host in 5 minutes" (компактно)
-──────────────────────────────────────────────────────
-
-  ЭКРАН: переключись на браузер, прокрути к секции setup.
-
-  ГОВОРИ:
-
-  "How does a DAO actually set this up?
-
-  Step one: open app.squads.so — your multisig address,
-  the PDA, is visible right there. Copy it.
-
-  Step two: paste it into one line in the config:
-  CUSTOS_WATCH equals your PDA.
-
-  Step three: add a Discord or Slack webhook URL.
-  Run npm run dev.
-
-  That's it. From that moment, any config change on
-  your multisig — threshold, signers, timelock, nonce —
-  fires an alert to your team within a second.
-
-  Free Helius RPC. MIT licensed. No paid tiers.
-  No vendor lock-in."
-
-
-──────────────────────────────────────────────────────
-[2:45–3:00] ЗАКРЫТИЕ — прокрути к footer (GitHub URL виден)
-──────────────────────────────────────────────────────
-
-  ГОВОРИ:
-
-  "Solana Foundation's STRIDE program covers protocols
-  above ten million in TVL — about fifty protocols.
-
-  The other ten thousand DAO treasuries, grant multisigs,
-  and community funds on Solana have nothing.
-
-  Custos Nox is for them.
-
-  github.com/cryptoyasenka/custos-nox"
-
-  → Держи на GitHub URL 3 сек.
-  → СТОП ЗАПИСЬ.
+Итого main demo silent: ~3:00.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-КОМАНДЫ (скопируй в notepad перед записью)
+ШАГ 6 — МОНТАЖ В CAPCUT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-npm run smoke:timelock -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
-npm run smoke:weaken -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
-npm run smoke:nonce-init
-npm run smoke:rotate-signers -- Cn7XXry3SWbeqkBsH7uWXLViz4ffUqzyb3fi5Dkfr9Ao
-npm test src/detectors/stale-nonce-execution
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ТАЙМИНГ (ориентир)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[0:00–0:30] DAO + multisig + Squads context     0:30  | браузер hero+timeline
-[0:30–0:45] Detector cards on the site          0:15  | браузер cards
-[0:45–0:55] Architecture overlay (CapCut)       0:10  | architecture.html overlay
-[0:55–1:05] Switch to terminals                 0:10  | два терминала
-[1:05–1:22] Детектор 1 (timelock)               0:17  | терминал
-[1:22–1:37] Детектор 2 (weakening)              0:15  | терминал
-[1:37–1:52] Детектор 3 (nonce)                  0:15  | терминал
-[1:52–2:05] Детектор 5 (signer rotation)        0:13  | терминал
-[2:05–2:21] Discord — 4 embeds                  0:16  | discord
-[2:21–2:29] Детектор 4 — stale nonce tests      0:08  | терминал
-[2:29–2:45] Setup walkthrough (компактно)       0:16  | браузер
-[2:45–3:00] Close                               0:15  | браузер
-─────────────────────────────────────────────────────
-Итого                                           ~3:00
-
-Распределение: 70% live product (browser+terminal+Discord),
-25% объяснение (первые 30s + компактный setup walkthrough),
-5% architecture overlay (закрывает требование "если не визуально — диаграмма").
-
-Если выходишь за 3:05 — режь паузы ожидания транзакций
-в редакторе (но не вырезай их полностью — они доказывают
-что цепочка реальная, не mockup).
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 5 — МОНТАЖ В CAPCUT (main video + architecture overlay)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-В отличие от F2 — это не slideshow, это запись экрана
-+ один наложенный 10-сек overlay-клип.
-
-1. Новый проект → формат 16:9, 1080p
+1. Новый проект → 16:9, 1080p
 
 2. TRACK 1 (main video):
-   Импортируй MP4 main demo (запись экрана из OBS/Loom/Win+G)
-   Обрежь тишину в начале (до первой фразы) и в конце
-   (после "github.com/cryptoyasenka/custos-nox" + 3 сек)
+   • Импортируй MP4 main demo (silent)
+   • Обрежь начальную тишину до 0:00
+   • Если запись чуть длиннее 3:00 — режь паузы в местах
+     где ничего не происходит
 
-3. TRACK 2 (overlay) — architecture-overlay:
-   - Импортируй `architecture-overlay.mp4` (10 сек, из ШАГ 3.5)
-   - Расположи на отметке 0:45 timeline (overlay поверх main)
-   - Длина = 10 сек (заканчивается на 0:55)
-   - Применить эффекты к overlay-клипу:
-       * Fade in: 0.3 сек (с 0:45 до 0:45.3)
-       * Fade out: 0.3 сек (с 0:54.7 до 0:55)
-   - Если в main video на 0:45 есть голос — приглуши его на
-     это окно (-12 dB или mute), чтобы голос overlay был чистый
-   - Если overlay уже с голосом (Вариант A) — main video мьютишь
-     на 10 сек 0:45–0:55
-   - Если overlay без голоса (Вариант B) — добавь TRACK 3 audio
-     с MP3 голоса overlay на ту же отметку 0:45–0:55
+3. TRACK 2 (overlay) — architecture:
+   • Импортируй `architecture-overlay.mp4` (10 сек)
+   • Расположи поверх main с 1:30 до 1:40
+   • Fade in 0.3s, fade out 0.3s
+   • Поверх main video — full opacity на эти 10 сек
 
-4. Если в main demo есть длинные паузы ожидания транзакций
-   (>5 сек) — подрежь их до 4 сек, но НЕ вырезай полностью
+4. TRACK 3 (voice — главная дорожка):
+   Импортируй ВСЕ 9 mp3 из video-build/f3/voice/ и расположи:
 
-5. Проверь общую длину — должно быть ≤3:05
+     01-hero.mp3              → 0:00
+     02-live-watchlist.mp3    → 0:25
+     03-detectors.mp3         → 0:50
+     04-architecture.mp3      → 1:30   (поверх overlay)
+     05a-replay-rows.mp3      → 1:40
+     05b-replay-detail.mp3    → 2:14   (после 05a)
+     06-discord.mp3           → 2:25
+     07a-setup.mp3            → 2:40
+     07b-close.mp3            → 2:55
 
-6. Опционально: lower-third с твоим именем + "Custos Nox"
-   в первые 5 сек (не обязательно)
+   Проверь что между mp3 нет резких обрывов — если нужно,
+   двигай следующий на 0.5s чтобы дать паузу
 
-7. Export → MP4, 1080p, H.264
+5. TRACK 4 (music, ОПЦИОНАЛЬНО):
+   • Тихая ambient
+   • -18 dB
+   • Fade in 1s в 0:00, fade out 2s в 3:00
+   • Источник: pixabay.com/music
 
-ПРОВЕРКА после экспорта:
-- На отметке 0:45 overlay появляется плавно (fade in)
-- Голос overlay читается чисто, без наложения main-голоса
-- На 0:55 overlay плавно исчезает, main demo продолжается
-  с фразой "Left terminal — Custos Nox..."
+6. ПРОВЕРКА:
+   • Общая длина 2:55–3:05
+   • На 1:30 architecture overlay появляется fade in
+   • На 1:40 fade out, main video продолжается
+   • Голос везде синхронизирован с экранным действием
+   • На 2:00 виден клик на alert card + развёрнутая панель
+   • На 2:25 переключение на Discord плавное
+
+7. Export → MP4, 1080p, H.264, ~25–35 МБ
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 6 — ЗАГРУЗКА (LOOM + YOUTUBE UNLISTED)
+ШАГ 7 — ЗАГРУЗКА (LOOM + YOUTUBE UNLISTED)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-LOOM (PRIMARY — требование Superteam UA для tech demo):
-  1. Loom Desktop / loom.com → New Recording / Upload
-  2. Если уже есть MP4 — Upload existing
-  3. Заголовок: Custos Nox — F3 Tech Demo (Solana Frontier 2026)
-  4. Описание (вставь как есть):
+LOOM (PRIMARY — Superteam UA требует Loom):
+  1. loom.com → Upload existing
+  2. Заголовок: Custos Nox — F3 Tech Demo (Solana Frontier 2026)
+  3. Описание:
 
-     Custos Nox — real-time attack detection for Solana
-     multisigs and DAOs. This 3-minute live demo reproduces
-     the Drift Protocol April 2026 attack chain on devnet
-     with 4 detectors firing in real time, plus an adjacent
-     signer-rotation attack and Discord fan-out.
+     Custos Nox — real-time security monitor for Solana DAO
+     multisigs. This 3-minute live demo shows the dashboard
+     watching 12 mainnet DAOs in real time, walks through
+     5 detectors mapped onto the Drift Protocol attack chain,
+     and replays a devnet attack inside the alert feed.
      Live: https://custos-nox.up.railway.app
      GitHub: https://github.com/cryptoyasenka/custos-nox
 
-  5. Visibility: Anyone with the link
-  6. Скопируй Loom URL → сохрани
+  4. Visibility: Anyone with the link
+  5. Скопируй Loom URL
 
 YOUTUBE UNLISTED (BACKUP — для Arena A11):
-  1. YouTube Studio → Create → Upload video
-  2. Visibility: UNLISTED (не Private!)
-  3. Заголовок: Custos Nox — F3 Tech Demo (Solana Frontier 2026)
-  4. Описание: то же что для Loom
-  5. Дождись обработки
-  6. Открой в ИНКОГНИТО — убедись что открывается без логина
-  7. Скопируй YouTube URL → сохрани
+  1. YouTube Studio → Upload
+  2. Visibility: UNLISTED
+  3. Заголовок и описание — то же что Loom
+  4. Дождись обработки, проверь в инкогнито
+  5. Скопируй YouTube URL
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ШАГ 7 — ВСТАВЬ URL В ДВА МЕСТА
+ШАГ 8 — ВСТАВЬ URL В ДВА МЕСТА
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-ARENA A11 (YouTube URL):
+ARENA A11 (YOUTUBE URL):
   arena.colosseum.org → твой проект → Edit submission
   → Step 2 → PRODUCT DEMO VIDEO → вставь YOUTUBE URL → Save
 
-SUPERTEAM EARN (Loom URL):
+SUPERTEAM EARN (LOOM URL):
   https://superteam.fun/earn/listing/frontier-hackathon-ukrainian-track
-  → в форме "Tech Demo Video" вставь LOOM URL → Submit
+  → "Tech Demo Video" → вставь LOOM URL → Submit
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ТАЙМИНГ (ориентир для CapCut)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[0:00–0:25] Hero + Drift hook                  ~25s | браузер hero
+[0:25–0:50] #live multi-DAO grid               ~25s | браузер #live
+[0:50–1:30] 5 detector cards                   ~40s | браузер cards
+[1:30–1:40] Architecture overlay (CapCut)      ~10s | overlay поверх
+[1:40–2:25] Devnet replay в alert feed         ~45s | браузер alert feed
+[2:25–2:40] Discord fan-out                    ~15s | discord
+[2:40–3:00] Setup + close                      ~20s | браузер footer
+─────────────────────────────────────────────────────
+Итого                                          ~3:00
+
+100% browser + 10s architecture overlay + 15s Discord = 0% terminal.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ЕСЛИ ЧТО-ТО ПОШЛО НЕ ТАК
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Daemon не показывает алерт →
-  Подожди 7–10 сек. Devnet RPC иногда медленный.
+Дашборд показывает "daemon offline, showing devnet sample" →
+  Daemon недоступен. Если на mainnet — проверь Railway logs +
+  /health endpoint. Если на localhost — рестартни npm run dev.
+  Fallback с SAMPLE_ALERTS тоже подходит для съёмки, narration
+  работает в обоих случаях.
 
-smoke:nonce-init выдаёт ошибку "account already exists" →
-  Аккаунт уже создан. Запусти:
-    npm run smoke:nonce-plan
-  Скопируй новый pubkey → обнови CUSTOS_WATCH в .env → рестартни daemon.
+В alert feed только 1-2 карточки вместо 4 →
+  Smoke chain из ШАГ 2 не отработала. Проверь что devnet RPC
+  отдаёт responses (curl https://api.devnet.solana.com -d '...').
+  Запусти smoke-команды повторно по одной с паузой 5 сек
+  между ними.
 
-Discord не получает алерты →
-  Проверь CUSTOS_DISCORD_WEBHOOK в .env (без кавычек, полный URL).
-  Рестартни daemon (Ctrl+C → npm run dev).
+Voice mp3 не совпадают по длине с silent блоками →
+  Это норма. В CapCut двигай следующий mp3 чуть позже,
+  растягивай или режь silent видео между блоками.
+  Главное — голос синхронизирован с тем что на экране.
 
 Запись вышла за 3:10 →
-  В редакторе обрежь паузы ожидания RPC — они могут быть 5–8 сек.
-  Допустимо до 3:15, судьи поймут.
+  Режь паузы в начале/конце секций в CapCut. Допустимо
+  до 3:15, судьи поймут.
 
-Сбилась в первых 30 секундах (это самая важная часть) →
-  Не страшно, начни запись заново. Эта часть — фундамент,
-  стоит того чтобы переснять.
+Ошибся в действиях во время записи →
+  Stop, начни заново. Голос всё равно из mp3, так что
+  единственная цель — попасть movements в правильные
+  тайм-окна. Несколько дублей это нормально.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-КЛЮЧЕВЫЕ ФРАЗЫ — ВЫУЧИ ДО ЗАПИСИ
+КЛЮЧЕВЫЕ МОМЕНТЫ КОТОРЫЕ ДОЛЖНЫ БЫТЬ В КАДРЕ
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. "A multisig works like a company bank account that
-   requires multiple signatures."
-   → открывает аналогией которую любой судья поймёт
+1. Зелёные точки на 12 DAO-карточках (#live grid)
+2. 5 detector карточек с метками "Drift step 1/4" и т.д.
+3. Architecture overlay (5 детекторов параллельно)
+4. 4 alert-карточки в alert feed (Drift chain replay)
+5. Развёрнутая alert detail panel (severity / changed field
+   / signer / Solscan link)
+6. 4 Discord embed'а в #custos-alerts
+7. Setup section с 3 строками + GitHub URL
 
-2. "Squads is the most popular multisig tool on Solana."
-   → закрепляет масштаб и релевантность
-
-3. "In April 2026, that cost one protocol $285 million."
-   → крючок (после контекста, не до)
-
-4. "The Drift attack wasn't a sudden hack."
-   → задаёт 9-дневное окно
-
-5. "Custos Nox is that tool."
-   → позиционирование, говори тихо и уверенно
-
-6. "This is the moment the drain was armed."
-   → на nonce-init, технически самый острый момент
-
-7. "If Drift had this running on March 23rd, that first
-   CRITICAL alert would have landed nine days before
-   the drain."
-   → эмоциональный пик в Discord-секции
-
-8. "The other ten thousand DAO treasuries on Solana
-   have nothing."
-   → закрывает gap'ом
+Если хотя бы 6 из 7 в кадре — судья поймёт продукт.
