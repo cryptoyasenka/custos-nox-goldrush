@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1920px; height: 1080px;
+    background: #05080f;
+    overflow: hidden;
+    font-family: 'Segoe UI', -apple-system, Arial, sans-serif;
+    color: #fff;
+  }
+
+  canvas#stars {
+    position: fixed; inset: 0; z-index: 0;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    padding: 90px 120px;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .slide.active { opacity: 1; }
+
+  /* Section label */
+  .sec-label {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 13px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: #2a3556;
+    margin-bottom: 30px;
+    opacity: 0; transform: translateY(-10px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  .sec-label.show { opacity: 1; transform: translateY(0); }
+  .sec-bar {
+    width: 3px; height: 18px; border-radius: 2px;
+    background: #c0392b;
+  }
+  .sec-bar.green { background: #27ae60; }
+  .sec-bar.red   { background: #e74c3c; }
+
+  /* Headline */
+  .hl {
+    font-size: 72px; font-weight: 800;
+    line-height: 1.08; margin-bottom: 60px;
+    opacity: 0; transform: translateY(18px);
+    transition: opacity 0.65s, transform 0.65s;
+  }
+  .hl.show { opacity: 1; transform: translateY(0); }
+  .hl .red   { color: #c0392b; }
+  .hl .green { color: #27ae60; }
+  .hl .cyan  { color: #1abc9c; }
+
+  /* ── SLIDE 1: Timeline ── */
+  .timeline { display: flex; flex-direction: column; }
+  .tl-row {
+    display: flex; align-items: flex-start; gap: 0;
+    border-top: 1px solid #0d1222;
+    padding: 20px 0;
+    opacity: 0; transform: translateX(-24px);
+    transition: opacity 0.45s, transform 0.45s;
+  }
+  .tl-row:last-child { border-bottom: 1px solid #0d1222; }
+  .tl-row.show { opacity: 1; transform: translateX(0); }
+  .tl-date {
+    font-size: 13px; letter-spacing: 0.1em;
+    color: #1e2840; font-family: 'Courier New', monospace;
+    min-width: 90px; padding-top: 3px;
+  }
+  .tl-dot {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: #c0392b; margin-top: 5px; margin-right: 22px;
+    flex-shrink: 0;
+  }
+  .tl-dot.orange { background: #e67e22; }
+  .tl-dot.bright { background: #e74c3c; box-shadow: 0 0 14px #e74c3c77; }
+  .tl-event { font-size: 21px; color: #aaa; flex: 1; }
+  .tl-detector {
+    font-size: 13px; font-family: 'Courier New', monospace;
+    color: #c0392b;
+    background: rgba(192,57,43,0.09);
+    border: 1px solid rgba(192,57,43,0.22);
+    padding: 3px 11px; border-radius: 4px;
+    margin-top: 8px; display: inline-block;
+  }
+  .tl-amount { font-size: 32px; font-weight: 800; color: #e74c3c; }
+
+  /* ── SLIDE 2: Detector cards ── */
+  .det-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+  }
+  .det-card {
+    background: #090c18; border: 1px solid #111828;
+    border-radius: 14px; padding: 30px 36px;
+    opacity: 0; transform: translateY(22px);
+    transition: opacity 0.45s, transform 0.45s;
+  }
+  .det-card.show { opacity: 1; transform: translateY(0); }
+  .det-num {
+    font-size: 12px; letter-spacing: 0.22em;
+    color: #1e2840; font-family: 'Courier New', monospace;
+    margin-bottom: 10px;
+  }
+  .det-name { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .det-desc { font-size: 15px; color: #2e3d5a; line-height: 1.5; }
+  .det-tag {
+    display: inline-block; margin-top: 16px;
+    font-size: 12px; letter-spacing: 0.16em;
+    color: #27ae60; font-family: 'Courier New', monospace;
+    background: rgba(39,174,96,0.07);
+    border: 1px solid rgba(39,174,96,0.22);
+    padding: 3px 11px; border-radius: 4px;
+  }
+
+  /* ── SLIDE 3: Terminal ── */
+  .terminal {
+    background: #070a14; border: 1px solid #0f1828;
+    border-radius: 14px; overflow: hidden; max-width: 1000px;
+  }
+  .term-bar {
+    background: #0c1020; border-bottom: 1px solid #0f1828;
+    padding: 15px 22px; display: flex; align-items: center; gap: 9px;
+  }
+  .mac-r { width: 13px; height: 13px; border-radius: 50%; background: #e74c3c; }
+  .mac-y { width: 13px; height: 13px; border-radius: 50%; background: #f39c12; }
+  .mac-g { width: 13px; height: 13px; border-radius: 50%; background: #27ae60; }
+  .term-title {
+    margin-left: 14px; font-size: 13px;
+    color: #1e2840; font-family: 'Courier New', monospace;
+    letter-spacing: 0.06em;
+  }
+  .term-body {
+    padding: 30px 36px;
+    font-family: 'Courier New', monospace; font-size: 19px; line-height: 1.85;
+  }
+  .tl { opacity: 0; transition: opacity 0.12s; white-space: pre; }
+  .tl.show { opacity: 1; }
+  .dim { color: #1e2840; }
+  .wht { color: #bbb; }
+  .grn { color: #27ae60; }
+  .cyn { color: #1abc9c; }
+  .ylw { color: #f39c12; }
+  .red { color: #e74c3c; }
+  .crit {
+    background: #c0392b; color: #fff;
+    padding: 1px 9px; border-radius: 3px;
+    font-weight: 700; font-size: 17px;
+  }
+
+  .pills {
+    display: flex; gap: 14px; margin-top: 44px; flex-wrap: wrap;
+  }
+  .pill {
+    padding: 9px 22px; border-radius: 999px;
+    font-size: 14px; letter-spacing: 0.1em;
+    border: 1px solid; font-family: 'Courier New', monospace;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .pill.show { opacity: 1; transform: translateY(0); }
+  .pill-red   { color: #c0392b; border-color: rgba(192,57,43,0.28); }
+  .pill-green { color: #27ae60; border-color: rgba(39,174,96,0.28); }
+  .pill-gray  { color: #2e3d5a; border-color: rgba(46,61,90,0.4); }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- ══════════════ SLIDE 1 ══════════════ -->
+<div class="slide" id="s1">
+  <div class="sec-label" id="s1l"><div class="sec-bar"></div>01 / THE DRIFT EXPLOIT · APRIL 2026</div>
+  <div class="hl" id="s1h">Nine days of on-chain warnings.<br><span class="red">Nobody was watching.</span></div>
+  <div class="timeline">
+    <div class="tl-row" id="t1">
+      <span class="tl-date">MAR 23</span>
+      <div class="tl-dot orange"></div>
+      <div>
+        <div class="tl-event">Nonce account initialized</div>
+        <span class="tl-detector">PrivilegedNonceDetector</span>
+      </div>
+    </div>
+    <div class="tl-row" id="t2">
+      <span class="tl-date">MAR 26</span>
+      <div class="tl-dot"></div>
+      <div>
+        <div class="tl-event">Timelock removed — set to zero</div>
+        <span class="tl-detector">TimelockRemovalDetector</span>
+      </div>
+    </div>
+    <div class="tl-row" id="t3">
+      <span class="tl-date">MAR 26</span>
+      <div class="tl-dot"></div>
+      <div>
+        <div class="tl-event">Multisig threshold weakened</div>
+        <span class="tl-detector">MultisigWeakeningDetector</span>
+      </div>
+    </div>
+    <div class="tl-row" id="t4">
+      <span class="tl-date">APR 01</span>
+      <div class="tl-dot bright"></div>
+      <div class="tl-amount">$285,000,000 drained</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 2 ══════════════ -->
+<div class="slide" id="s2">
+  <div class="sec-label" id="s2l"><div class="sec-bar green"></div>02 / CUSTOS NOX</div>
+  <div class="hl" id="s2h">Four detectors.<br><span class="green">Zero missed attacks.</span></div>
+  <div class="det-grid">
+    <div class="det-card" id="d1">
+      <div class="det-num">01</div>
+      <div class="det-name">PrivilegedNonceDetector</div>
+      <div class="det-desc">Unauthorized nonce account initialization</div>
+      <span class="det-tag">CAUGHT</span>
+    </div>
+    <div class="det-card" id="d2">
+      <div class="det-num">02</div>
+      <div class="det-name">TimelockRemovalDetector</div>
+      <div class="det-desc">Timelock reduced to zero — vault open</div>
+      <span class="det-tag">CAUGHT</span>
+    </div>
+    <div class="det-card" id="d3">
+      <div class="det-num">03</div>
+      <div class="det-name">MultisigWeakeningDetector</div>
+      <div class="det-desc">Threshold reduction in multisig governance</div>
+      <span class="det-tag">CAUGHT</span>
+    </div>
+    <div class="det-card" id="d4">
+      <div class="det-num">04</div>
+      <div class="det-name">StaleProposalDetector</div>
+      <div class="det-desc">Abandoned proposals left open in governance</div>
+      <span class="det-tag">CAUGHT</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 3 ══════════════ -->
+<div class="slide" id="s3">
+  <div class="sec-label" id="s3l"><div class="sec-bar red"></div>03 / REAL-TIME ALERT</div>
+  <div class="hl" id="s3h">Attack detected.<br><span class="cyan">Alert fires in milliseconds.</span></div>
+  <div class="terminal">
+    <div class="term-bar">
+      <div class="mac-r"></div><div class="mac-y"></div><div class="mac-g"></div>
+      <span class="term-title">custos-nox — daemon</span>
+    </div>
+    <div class="term-body">
+      <div class="tl dim" id="l0">$ npm run start</div>
+      <div class="tl grn" id="l1">● Custos Nox started — watching 1 multisig</div>
+      <div class="tl dim" id="l2">  Subscribed: AjULUVaCpzdGvCXgUkHLitkBR6nmn1M7...MZNy</div>
+      <div class="tl dim" id="l3">&nbsp;</div>
+      <div class="tl" id="l4"><span class="crit">CRITICAL</span>  <span class="cyn">SQUADS-TIMELOCK-REMOVAL</span></div>
+      <div class="tl wht" id="l5">  Timelock removed on multisig</div>
+      <div class="tl dim" id="l6">  reason              <span class="ylw">timelock_reduced</span></div>
+      <div class="tl dim" id="l7">  previousTimelock    <span class="wht">86400</span></div>
+      <div class="tl dim" id="l8">  currentTimelock     <span class="red" style="font-weight:700">0</span></div>
+    </div>
+  </div>
+  <div class="pills">
+    <span class="pill pill-gray" id="p1">SOLANA</span>
+    <span class="pill pill-gray" id="p2">TYPESCRIPT</span>
+    <span class="pill pill-green" id="p3">MIT · FREE FOREVER</span>
+    <span class="pill pill-red" id="p4">205 TESTS · ALL GREEN</span>
+  </div>
+</div>
+
+<script>
+// Stars
+const cv = document.getElementById('stars');
+const cx = cv.getContext('2d');
+cv.width = 1920; cv.height = 1080;
+for (let i = 0; i < 220; i++) {
+  const x = Math.random() * 1920, y = Math.random() * 1080;
+  const r = Math.random() * 0.9 + 0.1;
+  const a = Math.random() * 0.13 + 0.02;
+  cx.beginPath(); cx.arc(x, y, r, 0, Math.PI * 2);
+  cx.fillStyle = `rgba(255,255,255,${a})`; cx.fill();
+}
+
+const $ = id => document.getElementById(id);
+const show = id => $(id)?.classList.add('show');
+const on   = id => $(id)?.classList.add('active');
+const off  = id => $(id)?.classList.remove('active');
+
+// ── Slide 1: 0–9s ──
+on('s1');
+setTimeout(() => show('s1l'), 300);
+setTimeout(() => show('s1h'), 700);
+setTimeout(() => show('t1'),  1500);
+setTimeout(() => show('t2'),  2400);
+setTimeout(() => show('t3'),  3300);
+setTimeout(() => show('t4'),  4200);
+
+// ── Slide 2: 9–18s ──
+setTimeout(() => { off('s1'); on('s2'); }, 9000);
+setTimeout(() => show('s2l'), 9400);
+setTimeout(() => show('s2h'), 9800);
+setTimeout(() => show('d1'),  10500);
+setTimeout(() => show('d2'),  11100);
+setTimeout(() => show('d3'),  11700);
+setTimeout(() => show('d4'),  12300);
+
+// ── Slide 3: 18–27s ──
+setTimeout(() => { off('s2'); on('s3'); }, 18000);
+setTimeout(() => show('s3l'), 18400);
+setTimeout(() => show('s3h'), 18800);
+setTimeout(() => show('l0'),  19400);
+setTimeout(() => show('l1'),  19900);
+setTimeout(() => show('l2'),  20400);
+setTimeout(() => show('l3'),  20700);
+setTimeout(() => show('l4'),  21000);
+setTimeout(() => show('l5'),  21500);
+setTimeout(() => show('l6'),  21900);
+setTimeout(() => show('l7'),  22200);
+setTimeout(() => show('l8'),  22500);
+setTimeout(() => show('p1'),  23200);
+setTimeout(() => show('p2'),  23500);
+setTimeout(() => show('p3'),  23800);
+setTimeout(() => show('p4'),  24100);
+
+setTimeout(() => { document.title = 'SLIDES_DONE'; }, 26500);
+</script>
+</body>
+</html>

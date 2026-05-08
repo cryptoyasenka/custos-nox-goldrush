@@ -23,7 +23,27 @@ video-build/*.mkv
 video-build/*.mp3
 video-build/*.wav
 video-build/*.jpg
+video-build/**/*.webm
+video-build/**/slides-individual/
+video-build/**/slides-screenshots/
 video-build/неделя*/
 
 # Local audit / review artifacts (gstack, cso reports, etc.) — operator-side only.
 .gstack/
+
+# Archived (deprecated) artifacts — moved 2026-05-08 from old F2 pipeline (pre-deck-v2).
+# Tracked .md / .html / .png inside archive/ stay in git for history; binaries stay local.
+assets/archive/temp-dirs/
+assets/archive/*.mp4
+assets/archive/*.wav
+video-build/f2/archive/*.webm
+video-build/f2/archive/*.mp4
+video-build/f2/archive/*.mp3
+video-build/f2/archive/*.jpg
+video-build/f2/archive/*.ssml
+video-build/f2/archive/chunks/
+
+# Working-tree cruft (non-pipeline) untouched by archive sort.
+custos-nox-session.jsonl
+promo.mp4
+video-build/Видео*/

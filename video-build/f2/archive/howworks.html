@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1920px; height: 1080px;
+    background: #050505;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, #000 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .headline {
+    font-size: 62px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-bottom: 72px;
+    font-family: sans-serif;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .headline.show { opacity: 1; transform: translateY(0); }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    opacity: 0;
+    transform: translateX(-24px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .row.show { opacity: 1; transform: translateX(0); }
+
+  .det {
+    font-size: 21px;
+    color: #3a3a3a;
+    letter-spacing: 0.12em;
+    font-family: 'Courier New', monospace;
+    width: 480px;
+    text-align: right;
+  }
+
+  .arrow {
+    font-size: 18px;
+    color: #222;
+    font-family: 'Courier New', monospace;
+  }
+
+  .caught {
+    font-size: 21px;
+    font-weight: 700;
+    color: #27ae60;
+    letter-spacing: 0.2em;
+    font-family: 'Courier New', monospace;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    min-width: 120px;
+  }
+  .caught.show { opacity: 1; }
+
+  .divider {
+    width: 80px;
+    height: 1px;
+    background: #1a1a1a;
+    margin: 56px auto 32px;
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+  .divider.show { opacity: 1; }
+
+  .footer {
+    font-size: 15px;
+    color: #242424;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-family: 'Courier New', monospace;
+    opacity: 0;
+    transition: opacity 0.7s;
+  }
+  .footer.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="inner">
+  <div class="headline" id="hl">YOUR MULTISIG IS BEING WATCHED.</div>
+
+  <div class="rows">
+    <div class="row" id="r0">
+      <span class="det">PrivilegedNonceDetector</span>
+      <span class="arrow">→</span>
+      <span class="caught" id="c0">CAUGHT</span>
+    </div>
+    <div class="row" id="r1">
+      <span class="det">TimelockRemovalDetector</span>
+      <span class="arrow">→</span>
+      <span class="caught" id="c1">CAUGHT</span>
+    </div>
+    <div class="row" id="r2">
+      <span class="det">MultisigWeakeningDetector</span>
+      <span class="arrow">→</span>
+      <span class="caught" id="c2">CAUGHT</span>
+    </div>
+    <div class="row" id="r3">
+      <span class="det">StaleProposalDetector</span>
+      <span class="arrow">→</span>
+      <span class="caught" id="c3">CAUGHT</span>
+    </div>
+  </div>
+
+  <div class="divider" id="div"></div>
+  <div class="footer" id="foot">Custos Nox &nbsp;·&nbsp; Running 24 / 7</div>
+</div>
+
+<script>
+  const show = id => document.getElementById(id).classList.add('show');
+  setTimeout(() => show('hl'),   400);
+  setTimeout(() => { show('r0'); setTimeout(() => show('c0'), 280); }, 1300);
+  setTimeout(() => { show('r1'); setTimeout(() => show('c1'), 280); }, 1900);
+  setTimeout(() => { show('r2'); setTimeout(() => show('c2'), 280); }, 2500);
+  setTimeout(() => { show('r3'); setTimeout(() => show('c3'), 280); }, 3100);
+  setTimeout(() => show('div'),  4000);
+  setTimeout(() => show('foot'), 4300);
+  setTimeout(() => { document.title = 'HOWWORKS_DONE'; }, 6800);
+</script>
+</body>
+</html>

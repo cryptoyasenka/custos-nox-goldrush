@@ -1,18 +1,28 @@
 # CURRENT — custos (Custos Nox)
 
 **Last touched:** 2026-05-08
-**Status:** F2 deck v2 fully polished — все 5 judge-eye улучшений ВНЕДРЕНЫ (s1 product reveal + s4 daemon type + Discord mockup proof-card + Public Goods badge + founder footer + s6-url period fix). 8 анимированных слайдов записаны отдельно в `video-build/f2/slides-individual/slide-{1..8}.webm` для CapCut sequencing. Deadline May 10 23:59 PDT
+**Status:** F2 deck v2 fully polished — все 5 judge-eye улучшений ВНЕДРЕНЫ (s1 product reveal + s4 daemon type + Discord mockup proof-card + Public Goods badge + founder footer + s6-url period fix). 8 анимированных слайдов записаны отдельно в `video-build/f2/slides-individual/slide-{1..8}.webm` для CapCut sequencing. **+ 2026-05-08 чистка:** старый F2 pipeline (pre-deck-v2, May 5) перенесён в `*/archive/` — см. README в каждой архивной папке. Deadline May 10 23:59 PDT
 
-## Open files
+## Open files (ALIVE pipeline — после чистки 2026-05-08)
 - `.planning/SESSION-2026-05-08-COMPLETE.md` — full session log (3 commits, 5+1 fixes, decisions, what's next) — READ FIRST on resume
 - `.planning/PITCH-DECK-REVIEW-2026-05-08.md` — judge-eye audit (now all 5 improvements APPLIED in commit c13c15a)
 - `planning/VIDEO-2-PITCH.txt` — F2 pipeline (Playwright record + AI voice + CapCut)
 - `planning/VIDEO-3-DEMO.txt` — F3 pipeline (live demo + architecture overlay)
 - `planning/PITCH-SCRIPT-F2.md` — English narration source (8 slides)
 - `planning/TECH-DEMO-SCRIPT-F3.md` — English F3 script (with 0:45–0:55 overlay block)
+- `planning/ARENA-SUBMISSION-COPY.md` — main submission text (May 8)
 - `assets/pitch-slides/deck-v2.html` — 8-slide deck, source of truth for F2
 - `assets/pitch-slides/architecture.html` — single-slide diagram for F3 overlay
 - `video-build/f2/record-slides.mjs` — Playwright headless recorder → slides.webm
+- `video-build/f2/record-slides-individual.mjs` — per-slide recorder → slides-individual/slide-{1..8}.webm
+- `video-build/f2/screenshot-slides.mjs` — final-frame screenshots для sanity check
+
+## Archive (deprecated, до 2026-05-08)
+- `video-build/f2/archive/` — старые рекордеры hook/outro/cover/howworks + build-f2.sh + gen-vo.sh + 22-chunk VO. См. README
+- `assets/archive/` — старые final mp4 (f2-pitch*.mp4, f3-demo.mp4) + Generated Audio.wav + temp-dirs/
+- `assets/archive/pitch-slides-old/` — v1 deck.html + 7 PNG слайдов (заменены HTML 8-слайдным deck-v2)
+- `planning/archive/` — старые VIDEO-SCRIPT.md / IDEA.md / week-3 / RESEARCH-timelock и прочие планировки до May 7
+- `scripts/archive/` — старые Python генераторы видео + slides PNG
 
 ## Next step
 Yana runs (in this order):
