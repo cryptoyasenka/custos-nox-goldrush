@@ -61,10 +61,10 @@
 1. **New one-sentence intro at slide-1 start** — ≤5s, must be parsable in isolation:
    > "Custos Nox is a real-time security monitor for Solana DAO multisigs — open-source, sub-second alerts, MIT licensed."
    Then continue with the Drift hook.
-2. **New team slide (insert before close, ~10s):**
-   - Solo build by Yana, Solana developer based in Kyiv
-   - Background credibility line (1 fact: prior Solana / TEE / OSS work — concrete, no fluff)
-   - "No team to scale — that's the point. Public good, run by the community."
+2. **New team slide (insert before close, ~18-20s) — FINAL TEXT (Yana confirmed 2026-05-08):**
+   > "Built solo by Yana — Solana developer based in Kyiv. Background in Web3 security tooling: open-source ML models published on OpenGradient TEE hub, covering MEV detection, account abstraction, and EigenLayer monitoring. Custos Nox follows the same line — built as a public good, free forever."
+
+   Visual: minimal — name, Kyiv, OpenGradient mention, one-line tagline. No photo unless Yana wants one. The credibility fact = "ML models on OpenGradient TEE for security domain", which directly anchors why a security-monitoring daemon makes sense from her hands.
 3. **Explicit monetization line on slide 6 close:**
    > "No paid tiers ever. Public Goods Award sustainability — covered by Solana Foundation grant + Superteam Ukraine."
 
