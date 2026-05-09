@@ -292,7 +292,7 @@ export default function Home() {
               </div>
             </div>
             <p className="mt-6 text-center font-mono text-xs text-muted">
-              TypeScript · Solana web3.js · 215 tests · MIT · zero Rust
+              TypeScript · Solana web3.js · 228 tests · MIT · zero Rust
             </p>
           </div>
         </section>

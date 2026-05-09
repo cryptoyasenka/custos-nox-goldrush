@@ -10,7 +10,7 @@ git clone https://github.com/cryptoyasenka/custos-nox
 cd custos-nox
 npm install
 cp .env.example .env      # set CUSTOS_RPC_URL and CUSTOS_WATCH
-npm test                  # 215 tests, all must pass
+npm test                  # 228 tests, all must pass
 npm run lint              # biome — no warnings allowed
 npm run build             # tsc — strict mode, must succeed
 ```
