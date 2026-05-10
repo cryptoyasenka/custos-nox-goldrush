@@ -12,8 +12,8 @@
 **Daemon state — pick ONE:**
 
 **(A) Mainnet (preferred — strongest narrative):**
-- Railway daemon live at `https://custos-daemon.up.railway.app`, Helius RPC plugged in, `/health` returns `{"ok":true,"watching":8,...}`
-- Vercel `NEXT_PUBLIC_CUSTOS_DAEMON_URL=https://custos-daemon.up.railway.app`
+- Railway daemon live at `https://custos-daemon.up.railway.app`, Helius RPC plugged in, `/health` returns `{"ok":true,"watching":12,...}`
+- Railway dashboard service env: `NEXT_PUBLIC_CUSTOS_DAEMON_URL=https://custos-daemon.up.railway.app`
 - Dashboard `#live` shows green dot + label "Live mainnet · N events"
 
 **(B) Local devnet fallback (if Railway not finished):**
