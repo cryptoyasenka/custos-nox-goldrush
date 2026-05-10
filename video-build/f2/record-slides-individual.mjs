@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,7 +16,8 @@ const SLIDE_DURATIONS_MS = [
   14000, // s5 — 4 proof cards (200+/<1s/MIT/Discord mockup)
   14000, // s6 — setup in 5 min
   13000, // s7 — vision (now with Public Good badge)
-  10000, // s8 — CTA + team
+  12000, // s8 — Team (Yasya + OpenGradient models)
+  10000, // s9 — CTA + final
 ];
 // Per-slide lead-in: ~500ms (browser settle + slide reveal). Trim in CapCut if needed.
 
@@ -78,10 +80,24 @@ for (let idx = 0; idx < SLIDE_DURATIONS_MS.length; idx++) {
   await ctx.close();
 
   if (videoPath && fs.existsSync(videoPath)) {
-    const out = path.join(OUT_DIR, `slide-${slideNum}.webm`);
-    if (fs.existsSync(out)) fs.unlinkSync(out);
-    fs.renameSync(videoPath, out);
-    console.log(`  ✓ saved ${out}`);
+    const webmOut = path.join(OUT_DIR, `slide-${slideNum}.webm`);
+    if (fs.existsSync(webmOut)) fs.unlinkSync(webmOut);
+    fs.renameSync(videoPath, webmOut);
+    console.log(`  ✓ saved ${webmOut}`);
+
+    // CapCut on Windows rejects .webm — transcode to H.264 .mp4 (yuv420p, faststart).
+    const mp4Out = path.join(OUT_DIR, `slide-${slideNum}.mp4`);
+    if (fs.existsSync(mp4Out)) fs.unlinkSync(mp4Out);
+    try {
+      execSync(
+        `ffmpeg -y -loglevel error -i "${webmOut}" -c:v libx264 -pix_fmt yuv420p -preset slow -crf 18 -movflags +faststart -an "${mp4Out}"`,
+        { stdio: "inherit" },
+      );
+      console.log(`  ✓ transcoded ${mp4Out}`);
+    } catch (e) {
+      console.error(`  ✗ ffmpeg failed for slide ${slideNum}:`, e.message);
+    }
+
     // Clean tmp dir
     try {
       fs.rmSync(tmpDir, { recursive: true, force: true });
@@ -95,6 +111,8 @@ for (let idx = 0; idx < SLIDE_DURATIONS_MS.length; idx++) {
 
 await browser.close();
 
-console.log(`\n✓ all ${SLIDE_DURATIONS_MS.length} slides saved to ${OUT_DIR}`);
-console.log("  Files: slide-1.webm ... slide-8.webm");
-console.log("  Sequence in CapCut by filename order.");
+const lastIdx = SLIDE_DURATIONS_MS.length;
+console.log(`\n✓ all ${lastIdx} slides saved to ${OUT_DIR}`);
+console.log(`  WebM (lossless source): slide-1.webm ... slide-${lastIdx}.webm`);
+console.log(`  MP4 (CapCut-ready):     slide-1.mp4  ... slide-${lastIdx}.mp4`);
+console.log("  Sequence in CapCut by filename order. Import the .mp4 set.");
