@@ -44,34 +44,48 @@ for (let idx = 0; idx < SLIDE_DURATIONS_MS.length; idx++) {
     recordVideo: { dir: tmpDir, size: { width: 1920, height: 1080 } },
   });
   const page = await ctx.newPage();
+
+  // For slides ≠ 1: install pre-paint CSS that hides every .slide so the
+  // deck's default-active slide-1 (with $285M ticker) never bleeds into the
+  // first ~300ms of the recording. Hide HUD too. Init script runs BEFORE any
+  // page script, so the very first painted frame is already a black canvas.
+  await page.addInitScript((targetIdx) => {
+    const style = document.createElement("style");
+    style.id = "__rec_prep";
+    style.textContent =
+      ".hud{display:none!important}" +
+      (targetIdx > 0 ? ".slide{display:none!important;opacity:0!important}" : "");
+    (document.head || document.documentElement).appendChild(style);
+  }, idx);
+
   await page.goto(`file:///${DECK_PATH.replace(/\\/g, "/")}`);
 
-  // Hide HUD so it doesn't appear in recording
-  await page.addStyleTag({ content: ".hud { display: none !important; }" });
-
-  // Settle: let initial paint + onSlideEnter(0) finish
+  // Settle: deck script runs onSlideEnter(0) here. With slides hidden the
+  // counter ticks invisibly in the DOM — no visible bleed.
   await page.waitForTimeout(300);
 
-  // Jump straight to target slide WITHOUT fade transition, then re-fire animations
-  if (idx > 0) {
-    await page.evaluate((targetIdx) => {
-      const all = document.querySelectorAll(".slide");
-      all.forEach((s, i) => {
-        s.style.transition = "none";
-        s.classList.remove("active");
-        s.style.display = "none";
-        s.style.opacity = "0";
-      });
-      const target = all[targetIdx];
-      target.style.display = "flex";
-      // Force reflow so opacity transition is consistent
-      target.getBoundingClientRect();
-      target.classList.add("active");
-      target.style.opacity = "1";
-      // Re-fire entrance animations
-      if (typeof onSlideEnter === "function") onSlideEnter(targetIdx);
-    }, idx);
-  }
+  // Reveal the target slide cleanly and fire its entrance animations.
+  await page.evaluate((targetIdx) => {
+    const prep = document.getElementById("__rec_prep");
+    if (prep) prep.remove();
+    const all = document.querySelectorAll(".slide");
+    all.forEach((s) => {
+      s.style.transition = "none";
+      s.classList.remove("active");
+      s.style.display = "none";
+      s.style.opacity = "0";
+    });
+    const target = all[targetIdx];
+    target.style.display = "flex";
+    target.getBoundingClientRect(); // force reflow
+    target.classList.add("active");
+    target.style.opacity = "1";
+    // Re-pin HUD-hidden in case the deck script re-shows it.
+    const hudStyle = document.createElement("style");
+    hudStyle.textContent = ".hud{display:none!important}";
+    document.head.appendChild(hudStyle);
+    if (typeof onSlideEnter === "function") onSlideEnter(targetIdx);
+  }, idx);
 
   // Hold for slide duration
   await page.waitForTimeout(SLIDE_DURATIONS_MS[idx]);
