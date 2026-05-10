@@ -3,7 +3,7 @@
 **Last touched:** 2026-05-09 day end / session close. Comp выключается — следующая сессия читает эту секцию первой.
 
 ## ✅ Сегодня сделано (2026-05-09)
-- **Helius rotated:** старый `2e45da34-...` revoked у Helius; новый ключ — ТОЛЬКО в Railway env (`custos-nox` service → `CUSTOS_RPC_URL`); НИГДЕ в репо/`.env`/файлах. Daemon redeployed, проверял несколько раз — `watching:12, uptime` стабильно растёт (8285s = 2.3 часа без рестартов на момент закрытия сессии). Прежний SIGTERM-cycle, кажется, утих, но не гарантированно — для F3 recording по-прежнему рекомендую Variant B (local mainnet daemon) как безопаснее.
+- **Helius rotated:** старый ключ `<REDACTED>` revoked у Helius; новый ключ — ТОЛЬКО в Railway env (`custos-nox` service → `CUSTOS_RPC_URL`); НИГДЕ в репо/`.env`/файлах. Daemon redeployed, проверял несколько раз — `watching:12, uptime` стабильно растёт (8285s = 2.3 часа без рестартов на момент закрытия сессии). Прежний SIGTERM-cycle, кажется, утих, но не гарантированно — для F3 recording по-прежнему рекомендую Variant B (local mainnet daemon) как безопаснее.
 - **Repo вылизан:**
   - 51 failed CI run удалён (вся «волна» 8 мая, gh run delete)
   - 23 красных оставлены (7 мая и раньше — для натуральности «активного проекта», специально не трогать)
@@ -22,7 +22,7 @@
 
 ## 🔴 Что НЕ делать
 - ❌ Не коммитить новый Helius ключ. Только Railway env + локальный gitignored env.
-- ❌ Не запускать `git filter-repo` для зачистки старого `2e45da34-...` из истории — ключ revoked, безвреден; filter-repo сломает форки/SHA, рискованно перед submit.
+- ❌ Не запускать `git filter-repo` для зачистки старого ключа `<REDACTED>` из истории — ключ revoked, безвреден; filter-repo сломает форки/SHA, рискованно перед submit.
 - ❌ Не апгрейдить `next` major чтобы пофиксить 2 moderate postcss vulns — breaking change, не оправдано перед submit.
 - ❌ Не удалять оставшиеся 23 красных CI runs (Yana специально оставила для натуральности).
 

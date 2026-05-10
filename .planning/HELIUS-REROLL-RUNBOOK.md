@@ -1,12 +1,12 @@
 # Helius API Key Reroll — утренний runbook 2026-05-09
 
-> **STATUS: ✅ DONE 2026-05-09 morning.** Старый ключ `2e45da34-...` revoked в Helius dashboard, новый ключ установлен в Railway env (`custos-nox` service → `CUSTOS_RPC_URL`), daemon redeployed и подтверждён `watching:12`. Новый ключ нигде в репо не лежит, только в Railway. Файл оставлен как post-mortem reference.
+> **STATUS: ✅ DONE 2026-05-09 morning.** Старый ключ `<REDACTED>` revoked в Helius dashboard, новый ключ установлен в Railway env (`custos-nox` service → `CUSTOS_RPC_URL`), daemon redeployed и подтверждён `watching:12`. Новый ключ нигде в репо не лежит, только в Railway. Файл оставлен как post-mortem reference.
 
 **Зачем (была):** Helius API key утёк в public git (`planning/F3-RECORDING-OPTIONS.md` line 60 в коммитах `deb510d`, `005cd9f`). Любой может grab и сжечь 1M req/mo лимит. Чем дольше ключ живой — тем выше шанс что judges откроют красную галочку или daemon откажет посреди записи F3.
 
 **Время:** ~5 минут от начала до verify.
 
-**Старый ключ (для revoke):** `2e45da34-dfeb-4bc7-a85c-472e8c16e357` (НЕ копировать в новые места). После revoke — безвреден даже в git history.
+**Старый ключ (для revoke):** `<REDACTED — UUID, см. Helius dashboard или git history до 2026-05-09>` (НЕ копировать в новые места). После revoke — безвреден даже в git history.
 
 ---
 
@@ -14,7 +14,7 @@
 
 1. Открыть https://dashboard.helius.dev → Login (your account).
 2. Sidebar → API Keys (или Endpoints в зависимости от UI версии).
-3. Найти ключ `2e45da34-dfeb-4bc7-a85c-472e8c16e357` (если показывает первые/последние символы — `2e45da34...e16e357`).
+3. Найти старый ключ (см. Helius dashboard, или git history до 2026-05-09 в `planning/F3-RECORDING-OPTIONS.md` line 60).
 4. **Revoke / Delete** этот ключ.
 5. **Create new key** → дефолтные настройки (mainnet free tier 1M req/mo, 10 RPS).
 6. Скопировать новый ключ в clipboard. Никуда больше не вставлять.
@@ -60,12 +60,12 @@ curl https://custos-daemon.up.railway.app/health
 
 ```bash
 cd /c/Projects/custos
-grep -n "2e45da34" planning/ .planning/ -r
+grep -n "<OLD_KEY_PREFIX>" planning/ .planning/ -r
 # должно быть только в .planning/AUDIT-NIGHT-2026-05-09.md как историческая запись
 # (там ключ упомянут как "старый ключ для revoke" в этом самом runbook)
 ```
 
-Если grep находит 2e45da34 в `planning/F3-RECORDING-OPTIONS.md` — заменить на placeholder вручную.
+Если grep находит <OLD_KEY_PREFIX> в `planning/F3-RECORDING-OPTIONS.md` — заменить на placeholder вручную.
 
 ---
 
