@@ -1,6 +1,40 @@
 # CURRENT — custos (Custos Nox)
 
-**Last touched:** 2026-05-09 day end / session close. Comp выключается — следующая сессия читает эту секцию первой.
+**Last touched:** 2026-05-10 ~15:00 Kyiv. Все 7 audit-фиксов закрыты, prod чистый, F3 запись разблокирована.
+
+## ✅ Audit-fixes round (2026-05-10 утро/день)
+
+Все 9 audit-items из паралельного аудита закрыты по порядку (Yana: «делай все фиксы по порядку, чтоб не прикопаться»):
+
+- ✅ **CRITICAL #1** Helius revoke verified: `9a3d4501...` единственный live ключ, старый `<REDACTED>` revoked у Helius
+- ✅ **CRITICAL #2** literal Helius key вычищен из working tree (commit `0809aef`): `.planning/CURRENT.md` + `HELIUS-REROLL-RUNBOOK.md` redacted
+- ✅ **HIGH-1** GitHub branch protection main: required `verify` + `analyze (javascript-typescript)`, force-push блок, deletion блок, `enforce_admins=false` (owner может hotfix)
+- ✅ **HIGH-2** SHA-pin GitHub Actions (commit `6175ad7` или близко) — checkout/setup-node/codeql-action/{init,analyze} запиннены к v4.3.1 / v4.4.0 / v3.35.4
+- ✅ **HIGH-3** npm audit dev high — `bigint-buffer` (via `@sqds/multisig`) + `esbuild` (via `vitest`) задокументированы в SECURITY.md как dev-only chains, `npm audit --omit=dev --audit-level=high` clean
+- ✅ **MEDIUM-1+2** webhook hardening (commit `b7686aa`): `escapeTelegramHtml` экранирует subject/detector/cluster/explorerLink/context перед интерполяцией в `parse_mode=HTML`; `buildDiscordPayload` теперь добавляет `allowed_mentions: { parse: [] }` чтобы блокировать `@everyone`/`@here` injection через subject
+- ✅ **MEDIUM-3** HTTP listen host (commit `75cbb74`): `CUSTOS_HTTP_HOST` env var, default `"0.0.0.0"` (для Railway), self-hosters могут поставить `127.0.0.1` за reverse proxy. README + .env.example документируют. `HttpEventSink` пробрасывает host в `server.listen`. Daemon log теперь `host:port`
+- ✅ **MEDIUM-4** Dockerfile digest pin (commit `6475a36`): все 5 `FROM node:20-alpine` в `Dockerfile` + `dashboard/Dockerfile` запиннены к мульти-арч index `sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293`. Docker резолвит per-arch на pull.
+
+228/228 tests green после каждого изменения, typecheck clean. Все pushes в `origin/main`.
+
+## ✅ Prod state на 2026-05-10 ~15:00 Kyiv
+
+- **Dashboard `https://custos-nox.up.railway.app`:** HTTP 200, видны "Live mainnet · 5 events" — НЕ переразвернулся auto-deploy'ем после моих пушей в main; ждёт ручной trigger от Yana. **Это означает что F3 запись безопасна** — prod не пересоберётся в момент recording'а с новым Dockerfile digest pin.
+- **Daemon `https://custos-daemon.up.railway.app/health`:** `watching:12, ok:true, uptime` стабильно растёт.
+- **HIDE_DEMO_BADGES=1** на Railway env → DEMO-плашки скрыты, F3 видит чистый prod как судьи.
+
+**После записи F3** Yana должна:
+1. Откатить `NEXT_PUBLIC_HIDE_DEMO_BADGES=0` на Railway custos-site service env
+2. Триггернуть свежий dashboard build на Railway чтобы Dockerfile digest pin применился в проде (`cd /c/Projects/custos/dashboard && railway up . --path-as-root --service custos-site --ci --detach`)
+
+## 🟡 Submit-pending на 2026-05-10 (deadline 23:59 PDT)
+1. **F2 video в CapCut** — собрать: Veo3 intro (`assets/Blockchain_transactions_flow_red…_202605081236.mp4`, 16MB untracked) + 9 slides из `assets/pitch-slides/deck-v2.html` + 9 voice mp3 из `video-build/f2/voice/` → mp4
+2. **F3 screen recording** — по `planning/TECH-DEMO-SCRIPT-F3.md` v5 (dashboard-first, ~3 мин), 1-2 takes. **Variant B (local mainnet daemon)** если хочешь без Railway-side рестартов; ключ положить в `$env:CUSTOS_RPC_URL` или в `.env.mainnet` (gitignored)
+3. **Uploads:** YouTube Unlisted F2 (заменит старую `youtu.be/eX_Ze5lDLrc`); Loom для F3 (primary для Superteam UA) + YouTube Unlisted backup
+4. **Arena form** — paste-ready копи в `planning/ARENA-SUBMISSION-COPY.md`. Не хватает только Telegram handle от Yana
+5. **Superteam Earn Ukrainian track submit**
+
+## ✅ Сегодня сделано (2026-05-09)
 
 ## ✅ Сегодня сделано (2026-05-09)
 - **Helius rotated:** старый ключ `<REDACTED>` revoked у Helius; новый ключ — ТОЛЬКО в Railway env (`custos-nox` service → `CUSTOS_RPC_URL`); НИГДЕ в репо/`.env`/файлах. Daemon redeployed, проверял несколько раз — `watching:12, uptime` стабильно растёт (8285s = 2.3 часа без рестартов на момент закрытия сессии). Прежний SIGTERM-cycle, кажется, утих, но не гарантированно — для F3 recording по-прежнему рекомендую Variant B (local mainnet daemon) как безопаснее.
