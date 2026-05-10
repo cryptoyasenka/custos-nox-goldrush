@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 # -- build --------------------------------------------------------------------
-FROM node:20-alpine AS build
+FROM node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 AS build
 WORKDIR /app
 
 # Copy everything (filtered by .dockerignore: node_modules, dist, .git, dashboard, etc.)
@@ -11,13 +11,13 @@ RUN npm ci
 RUN npm run build
 
 # -- prune to prod deps -------------------------------------------------------
-FROM node:20-alpine AS deps
+FROM node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 # -- runtime ------------------------------------------------------------------
-FROM node:20-alpine AS runtime
+FROM node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 
