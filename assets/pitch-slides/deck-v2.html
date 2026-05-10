@@ -3,6 +3,21 @@
 <head>
 <meta charset="utf-8" />
 <title>Custos Nox — Pitch Deck v2</title>
+<script>
+  // Recording mode: per-slide recorder loads deck-v2.html?recording=1 so the
+  // recorder can hide everything pre-paint and reveal only the target slide.
+  // Without this hook, the deck's default-active slide-1 (with its $285M
+  // ticker) bleeds into the first ~300ms of every other slide's recording.
+  if (new URLSearchParams(location.search).get('recording') === '1') {
+    document.documentElement.classList.add('recording-mode');
+  }
+</script>
+<style>
+  /* Pre-paint blackout for ?recording=1 — recorder.evaluate() removes
+     the 'recording-mode' class on html and reveals the target slide. */
+  html.recording-mode .slide,
+  html.recording-mode .hud { display: none !important; opacity: 0 !important; }
+</style>
 <style>
   :root {
     --bg:      #0a0a0a;

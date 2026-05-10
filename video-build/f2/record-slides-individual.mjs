@@ -1,12 +1,39 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { setTimeout as sleep } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-chromium";
 
+// Windows: Explorer thumbnails / Defender / CapCut can hold a transient lock
+// on previously rendered slide-N.webm/.mp4 files. Retry unlink with backoff.
+async function safeUnlink(p) {
+  if (!fs.existsSync(p)) return;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    try {
+      fs.unlinkSync(p);
+      return;
+    } catch (e) {
+      if (e.code !== "EBUSY" && e.code !== "EPERM") throw e;
+      await sleep(250 * (attempt + 1));
+    }
+  }
+  throw new Error(`Could not unlink ${p} — close any preview windows or CapCut and retry.`);
+}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DECK_PATH = path.resolve(__dirname, "../../assets/pitch-slides/deck-v2.html");
-const OUT_DIR = path.resolve(__dirname, "slides-individual");
+// Allow override so we can re-render to a fresh folder when the previous one
+// is locked by Explorer thumbnail cache / Defender / CapCut.
+//   node record-slides-individual.mjs            -> slides-individual/
+//   node record-slides-individual.mjs --fresh    -> slides-individual-N/ (next free)
+const useFresh = process.argv.includes("--fresh");
+let OUT_DIR = path.resolve(__dirname, "slides-individual");
+if (useFresh) {
+  let n = 2;
+  while (fs.existsSync(path.resolve(__dirname, `slides-individual-${n}`))) n++;
+  OUT_DIR = path.resolve(__dirname, `slides-individual-${n}`);
+}
 
 const SLIDE_DURATIONS_MS = [
   16000, // s1 — incident + product reveal + 9-days punch
@@ -45,45 +72,34 @@ for (let idx = 0; idx < SLIDE_DURATIONS_MS.length; idx++) {
   });
   const page = await ctx.newPage();
 
-  // For slides ≠ 1: install pre-paint CSS that hides every .slide so the
-  // deck's default-active slide-1 (with $285M ticker) never bleeds into the
-  // first ~300ms of the recording. Hide HUD too. Init script runs BEFORE any
-  // page script, so the very first painted frame is already a black canvas.
-  await page.addInitScript((targetIdx) => {
-    const style = document.createElement("style");
-    style.id = "__rec_prep";
-    style.textContent =
-      ".hud{display:none!important}" +
-      (targetIdx > 0 ? ".slide{display:none!important;opacity:0!important}" : "");
-    (document.head || document.documentElement).appendChild(style);
-  }, idx);
+  // Load deck in recording mode — a synchronous <script> at the top of
+  // deck-v2.html sets html.recording-mode, which a CSS rule uses to hide
+  // every .slide and .hud BEFORE first paint. No bleed possible.
+  await page.goto(`file:///${DECK_PATH.replace(/\\/g, "/")}?recording=1`);
 
-  await page.goto(`file:///${DECK_PATH.replace(/\\/g, "/")}`);
-
-  // Settle: deck script runs onSlideEnter(0) here. With slides hidden the
-  // counter ticks invisibly in the DOM — no visible bleed.
+  // Settle: deck script runs onSlideEnter(0) — counter ticks in DOM but
+  // recording-mode CSS keeps everything hidden.
   await page.waitForTimeout(300);
 
-  // Reveal the target slide cleanly and fire its entrance animations.
+  // Drop recording-mode (which would also hide our target) and reveal the
+  // target slide explicitly via inline !important so we win over .slide.active.
   await page.evaluate((targetIdx) => {
-    const prep = document.getElementById("__rec_prep");
-    if (prep) prep.remove();
+    document.documentElement.classList.remove("recording-mode");
     const all = document.querySelectorAll(".slide");
     all.forEach((s) => {
       s.style.transition = "none";
       s.classList.remove("active");
-      s.style.display = "none";
-      s.style.opacity = "0";
+      s.style.setProperty("display", "none", "important");
+      s.style.setProperty("opacity", "0", "important");
     });
     const target = all[targetIdx];
-    target.style.display = "flex";
-    target.getBoundingClientRect(); // force reflow
+    target.style.setProperty("display", "flex", "important");
+    target.style.setProperty("opacity", "1", "important");
     target.classList.add("active");
-    target.style.opacity = "1";
-    // Re-pin HUD-hidden in case the deck script re-shows it.
-    const hudStyle = document.createElement("style");
-    hudStyle.textContent = ".hud{display:none!important}";
-    document.head.appendChild(hudStyle);
+    target.getBoundingClientRect();
+    // Keep HUD hidden during the recording.
+    const hud = document.querySelector(".hud");
+    if (hud) hud.style.setProperty("display", "none", "important");
     if (typeof onSlideEnter === "function") onSlideEnter(targetIdx);
   }, idx);
 
@@ -95,13 +111,13 @@ for (let idx = 0; idx < SLIDE_DURATIONS_MS.length; idx++) {
 
   if (videoPath && fs.existsSync(videoPath)) {
     const webmOut = path.join(OUT_DIR, `slide-${slideNum}.webm`);
-    if (fs.existsSync(webmOut)) fs.unlinkSync(webmOut);
+    await safeUnlink(webmOut);
     fs.renameSync(videoPath, webmOut);
     console.log(`  ✓ saved ${webmOut}`);
 
     // CapCut on Windows rejects .webm — transcode to H.264 .mp4 (yuv420p, faststart).
     const mp4Out = path.join(OUT_DIR, `slide-${slideNum}.mp4`);
-    if (fs.existsSync(mp4Out)) fs.unlinkSync(mp4Out);
+    await safeUnlink(mp4Out);
     try {
       execSync(
         `ffmpeg -y -loglevel error -i "${webmOut}" -c:v libx264 -pix_fmt yuv420p -preset slow -crf 18 -movflags +faststart -an "${mp4Out}"`,
