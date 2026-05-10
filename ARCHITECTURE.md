@@ -148,6 +148,10 @@ Env-var driven (see `.env.example`):
 | `CUSTOS_WATCH`           | yes      | Comma-separated `<program>:<account>` pairs                  |
 | `CUSTOS_DISCORD_WEBHOOK` | no       | Discord webhook URL                                          |
 | `CUSTOS_SLACK_WEBHOOK`   | no       | Slack webhook URL                                            |
+| `CUSTOS_TELEGRAM_BOT_TOKEN` | no    | Telegram bot token (paired with chat ID)                     |
+| `CUSTOS_TELEGRAM_CHAT_ID` | no      | Telegram chat ID (paired with bot token)                     |
+| `CUSTOS_HTTP_PORT`       | no       | If set, daemon also serves `/events` + `/health` on this port |
+| `CUSTOS_HTTP_HOST`       | no       | Bind address for `CUSTOS_HTTP_PORT` (default `0.0.0.0`)      |
 
 ## Dashboard (marketing site)
 

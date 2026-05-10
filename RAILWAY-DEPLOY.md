@@ -16,7 +16,7 @@ Public domains (after URL swap 2026-05-09):
   - `CUSTOS_HTTP_PORT=8080` (Railway routes the public domain to this port by default)
   - `CUSTOS_WATCH=` Tier 1 string (8 DAOs: Mango, Marinade, Pyth, Solend, Jupiter, Raydium, Orca, BonkDAO) — verbatim from `.planning/MAINNET-WATCHLIST.md` line 71
 - `Dockerfile` already in repo (Node 20 alpine, multi-stage, runs `node dist/daemon.js` as unprivileged user). Railway will build via Dockerfile, no nixpacks needed.
-- HTTP server in `src/alerts/http.ts` binds to `0.0.0.0` implicitly (Node `listen(port, cb)` default) — required for Railway container networking.
+- HTTP server in `src/alerts/http.ts` binds to the address from `CUSTOS_HTTP_HOST` (defaults to `0.0.0.0` if unset) — required for Railway container networking. Self-hosters behind a same-host reverse proxy can override to `127.0.0.1`.
 
 ## What Yana needs to do (3 steps)
 
