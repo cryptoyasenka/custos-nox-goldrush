@@ -66,6 +66,14 @@ describe("buildDiscordPayload", () => {
     };
     expect("url" in (payload.embeds[0] ?? {})).toBe(false);
   });
+
+  it("blocks @everyone/@here injection via allowed_mentions", () => {
+    const payload = buildDiscordPayload(
+      makeAlert({ subject: "@everyone drained" }),
+      FIXED_NOW,
+    ) as { allowed_mentions: { parse: string[] } };
+    expect(payload.allowed_mentions).toEqual({ parse: [] });
+  });
 });
 
 describe("buildSlackPayload", () => {
@@ -182,6 +190,28 @@ describe("buildTelegramPayload", () => {
     const payload = buildTelegramPayload(makeAlert({ explorerLink: "" })) as { text: string };
     expect(payload.text).not.toContain("Solscan");
     expect(payload.text).not.toContain("🔗");
+  });
+
+  it("HTML-escapes subject/detector/cluster so a memo string can't smuggle markup", () => {
+    const payload = buildTelegramPayload(
+      makeAlert({
+        subject: "<script>alert(1)</script> & Co",
+        detector: "name<with>brackets",
+        cluster: "main&net" as Alert["cluster"],
+      }),
+    ) as { text: string };
+    expect(payload.text).not.toContain("<script>");
+    expect(payload.text).toContain("&lt;script&gt;alert(1)&lt;/script&gt; &amp; Co");
+    expect(payload.text).toContain("name&lt;with&gt;brackets");
+    expect(payload.text).toContain("main&amp;net");
+  });
+
+  it("HTML-escapes explorerLink before interpolating into href attribute", () => {
+    const payload = buildTelegramPayload(
+      makeAlert({ explorerLink: 'https://solscan.io/x?q="><img src=x>' }),
+    ) as { text: string };
+    expect(payload.text).not.toContain('"><img');
+    expect(payload.text).toContain("&quot;&gt;&lt;img src=x&gt;");
   });
 });
 

@@ -149,4 +149,25 @@ describe("loadConfigFromEnv", () => {
       ).toThrow(/CUSTOS_HTTP_PORT/);
     }
   });
+
+  it("defaults httpHost to 0.0.0.0 when CUSTOS_HTTP_HOST unset", () => {
+    const cfg = loadConfigFromEnv({ CUSTOS_RPC_URL: "https://a.com" });
+    expect(cfg.httpHost).toBe("0.0.0.0");
+  });
+
+  it("reads CUSTOS_HTTP_HOST when set and trims whitespace", () => {
+    const cfg = loadConfigFromEnv({
+      CUSTOS_RPC_URL: "https://a.com",
+      CUSTOS_HTTP_HOST: "  127.0.0.1  ",
+    });
+    expect(cfg.httpHost).toBe("127.0.0.1");
+  });
+
+  it("falls back to 0.0.0.0 for whitespace-only CUSTOS_HTTP_HOST", () => {
+    const cfg = loadConfigFromEnv({
+      CUSTOS_RPC_URL: "https://a.com",
+      CUSTOS_HTTP_HOST: "   ",
+    });
+    expect(cfg.httpHost).toBe("0.0.0.0");
+  });
 });
