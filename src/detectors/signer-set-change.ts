@@ -1,6 +1,6 @@
 import { parseSquadsMultisigSigners } from "../parsers/squads.js";
-import type { AccountChangeEvent, Alert, Detector, SolanaEvent } from "../types/events.js";
-import { buildExplorerLink } from "./_shared.js";
+import type { Alert, Detector, SolanaEvent } from "../types/events.js";
+import { buildAlert } from "./_shared.js";
 import { SQUADS_V4_PROGRAM_ID } from "./timelock-removal.js";
 
 export const SIGNER_SET_CHANGE_DETECTOR_NAME = "squads-signer-set-change";
@@ -31,7 +31,9 @@ export const SignerSetChangeDetector: Detector = {
     // pattern from makeFieldWeakeningDetector so the dashboard treats it
     // uniformly with timelock/threshold parse failures.
     if (prev !== null && curr === null) {
-      return buildAlert(event, {
+      return buildAlert({
+        detectorName: SIGNER_SET_CHANGE_DETECTOR_NAME,
+        event,
         severity: "medium",
         subject: `multisig ${accountBase58} members vector became unparseable`,
         context: {
@@ -67,7 +69,9 @@ export const SignerSetChangeDetector: Detector = {
       subject = `Multisig ${accountBase58}: ${added.length} signer(s) added`;
     }
 
-    return buildAlert(event, {
+    return buildAlert({
+      detectorName: SIGNER_SET_CHANGE_DETECTOR_NAME,
+      event,
       severity,
       subject,
       context: {
@@ -81,22 +85,3 @@ export const SignerSetChangeDetector: Detector = {
     });
   },
 };
-
-interface BuildAlertArgs {
-  severity: Alert["severity"];
-  subject: string;
-  context: Record<string, unknown>;
-}
-
-function buildAlert(event: AccountChangeEvent, args: BuildAlertArgs): Alert {
-  return {
-    detector: SIGNER_SET_CHANGE_DETECTOR_NAME,
-    severity: args.severity,
-    subject: args.subject,
-    txSignature: event.signature,
-    cluster: event.cluster,
-    timestamp: event.timestamp,
-    explorerLink: buildExplorerLink(event.signature, event.account, event.cluster),
-    context: args.context,
-  };
-}

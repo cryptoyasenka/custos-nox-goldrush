@@ -1,6 +1,6 @@
 import { NONCE_ACCOUNT_LENGTH, SYSTEM_PROGRAM_ID, parseNonceAccount } from "../parsers/nonce.js";
-import type { AccountChangeEvent, Alert, Detector, SolanaEvent } from "../types/events.js";
-import { buildExplorerLink } from "./_shared.js";
+import type { Alert, Detector, SolanaEvent } from "../types/events.js";
+import { buildAlert } from "./_shared.js";
 
 export const PRIVILEGED_NONCE_DETECTOR_NAME = "privileged-nonce";
 
@@ -29,7 +29,9 @@ export const PrivilegedNonceDetector: Detector = {
       curr.authority &&
       (!prev || prev.state === "uninitialized")
     ) {
-      return buildAlert(event, {
+      return buildAlert({
+        detectorName: PRIVILEGED_NONCE_DETECTOR_NAME,
+        event,
         severity: "critical",
         subject: `Nonce account ${accountBase58} initialized with authority ${curr.authority.toBase58()}`,
         context: {
@@ -49,7 +51,9 @@ export const PrivilegedNonceDetector: Detector = {
       prev.authority &&
       !prev.authority.equals(curr.authority)
     ) {
-      return buildAlert(event, {
+      return buildAlert({
+        detectorName: PRIVILEGED_NONCE_DETECTOR_NAME,
+        event,
         severity: "high",
         subject: `Nonce authority rotated ${prev.authority.toBase58()} → ${curr.authority.toBase58()} on ${accountBase58}`,
         context: {
@@ -64,22 +68,3 @@ export const PrivilegedNonceDetector: Detector = {
     return null;
   },
 };
-
-interface BuildAlertArgs {
-  severity: Alert["severity"];
-  subject: string;
-  context: Record<string, unknown>;
-}
-
-function buildAlert(event: AccountChangeEvent, args: BuildAlertArgs): Alert {
-  return {
-    detector: PRIVILEGED_NONCE_DETECTOR_NAME,
-    severity: args.severity,
-    subject: args.subject,
-    txSignature: event.signature,
-    cluster: event.cluster,
-    timestamp: event.timestamp,
-    explorerLink: buildExplorerLink(event.signature, event.account, event.cluster),
-    context: args.context,
-  };
-}

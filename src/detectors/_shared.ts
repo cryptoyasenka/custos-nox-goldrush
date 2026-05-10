@@ -27,7 +27,7 @@ export function buildExplorerLink(
   return `https://solscan.io/account/${account.toBase58()}${suffix}`;
 }
 
-interface BuildAlertArgs {
+export interface BuildAlertArgs {
   detectorName: string;
   event: AccountChangeEvent;
   subject: string;
@@ -35,7 +35,7 @@ interface BuildAlertArgs {
   context: Record<string, unknown>;
 }
 
-function buildAlert(args: BuildAlertArgs): Alert {
+export function buildAlert(args: BuildAlertArgs): Alert {
   return {
     detector: args.detectorName,
     severity: args.severity,
