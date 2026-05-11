@@ -43,7 +43,8 @@
     "smoke:nonce-plan": "tsx scripts/devnet-nonce.ts --plan",
     "smoke:nonce-init": "tsx scripts/devnet-nonce.ts --init",
     "smoke:rotate-signers": "tsx scripts/devnet-rotate-signers.ts",
-    "check:null-subscribe": "tsx scripts/check-null-subscribe.ts"
+    "check:null-subscribe": "tsx scripts/check-null-subscribe.ts",
+    "watch:goldrush": "tsx scripts/run-goldrush.ts"
   },
   "engines": {
     "node": ">=20"

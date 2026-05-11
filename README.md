@@ -121,6 +121,43 @@ initial implementation, all on `main`:
 
 Test coverage grew from 147 to 215 across these changes (205 after the hardening pass; 10 added for the Telegram sink).
 
+## Alternative data source: Covalent GoldRush
+
+This repo ships a second, poll-based data path on top of the default
+Helius WebSocket subscription: `src/data-sources/goldrush.ts`.
+
+**Why use it.** Helius gives you sub-second account-change pushes but
+needs a live WS connection and an API key from a single vendor. Covalent
+GoldRush exposes a multi-chain transactions API (`solana-mainnet` is one
+of 200+ chains) over plain HTTPS — easier to run inside restricted
+networks, behind serverless functions, or on machines that can't hold
+long-lived WS sockets.
+
+**What it does.** `GoldRushWatcher` polls
+`GET /v1/solana-mainnet/address/{addr}/transactions_v2/` every
+`CUSTOS_GOLDRUSH_POLL_MS` (default 30 s) for each entry in
+`CUSTOS_WATCH`. New signatures fan out to a user-supplied handler in
+chronological order. Restart-time backlog is suppressed by `primeSeen()`
+so a fresh start doesn't replay 25 historical txs as alerts.
+
+**Run it.**
+
+```bash
+export CUSTOS_GOLDRUSH_API_KEY=cqt_rXXXXXXXXXXXX
+export CUSTOS_WATCH=GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw:DAOEXAMPLEPDA...
+npm run watch:goldrush
+```
+
+Stdout emits one JSON line per new transaction. Set
+`CUSTOS_DISCORD_WEBHOOK` to also fan out a one-line Discord message per
+signature.
+
+Built for the [Frontier × Covalent GoldRush
+sidetrack](https://superteam.fun/earn/listing/build-with-goldrush-track-powered-by-covalent).
+The watcher is independent of the main daemon — wiring is in
+`scripts/run-goldrush.ts` — so the production Helius path stays
+untouched.
+
 ## Quick start
 
 See [DEV-ENV-SETUP.md](./DEV-ENV-SETUP.md).
