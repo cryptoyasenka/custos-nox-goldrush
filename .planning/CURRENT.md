@@ -1,7 +1,7 @@
 # CURRENT — custos-nox-goldrush (sidetrack mirror)
 
-**Last touched:** 2026-05-11 17:30 Kyiv
-**Status:** Code complete. Submission BLOCKED — no live GoldRush bounty found.
+**Last touched:** 2026-05-12 Kyiv
+**Status:** ARCHIVED. Code complete; no live GoldRush bounty materialized; Yana chose archive over merge-into-main. Repo is GitHub-archived (read-only).
 
 ## What this repo is
 
@@ -27,7 +27,4 @@ The mirror repo stands as a portfolio artifact. If a GoldRush bounty surfaces (n
 
 ## Next step
 
-None autonomously. Yana decides in the morning whether to:
-1. Wait for sponsor program to surface
-2. Repurpose this code into the main repo as an alternative data source
-3. Archive the mirror repo
+None. Decision 2026-05-12: archive. Reason for not merging into main custos: main was already submitted to Frontier 2026-05-10 and is in judging — no submission-side gain from adding a data source mid-judging. If a real GoldRush bounty appears later, unarchive via `gh repo unarchive cryptoyasenka/custos-nox-goldrush` and reactivate.
